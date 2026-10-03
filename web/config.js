@@ -1,5 +1,5 @@
 window.TAPEFLOW_X_CONFIG = Object.freeze({
-  version: "2.9.0-xlayer-okx-connect",
+  version: "2.9.1-xlayer-okx-connect-lazy",
   chainId: 196,
   chainHex: "0xc4",
   chainName: "X Layer Mainnet",

@@ -12,6 +12,7 @@
   const OIDC_FLOW_KEY = "tapeflow-x-oidc-flow-v1";
   const OIDC_TOKEN_KEY = "tapeflow-x-oidc-token-v1";
   const WALLET_DISCONNECTED_KEY = "tapeflow-x-wallet-disconnected-v1";
+  const OKX_REMOTE_SESSION_KEY = "tapeflow-x-okx-remote-session-v1";
   const titleMap = {home:"首页",pay:"付款",receive:"收款码",packet:"红包",escrow:"担保付款",schedule:"定时付款",lock:"条件锁仓",veil:"隐私支付",cross:"跨链支付",receipt:"履约消息",merchant:"商户/API",settings:"设置"};
   const EN = {
     "首页":"Home","付款":"Pay","收款":"Receive","收款码":"Receive QR","红包":"Packets","担保":"Escrow","定时":"Schedule","隐私":"Privacy","跨链":"Omnichain","商户/API":"Merchant / API","合约与设置":"Contracts & Settings","连接钱包":"Connect wallet","让价值在 Tape 生态中流动":"Let value flow through the Tape ecosystem",
@@ -149,7 +150,7 @@
     "function validate(address payer,address token,address recipient,uint256 amount,bytes32 referenceId,bytes policyData) returns(bool)"
   ];
 
-  let browserProvider, publicProvider, signer, account = "", activeWalletProvider, remoteWalletProvider, okxUiPromise, packetKind = "equal", activePacketGeneration = "v4", lockKind = "self", confirmAction, scanStream, activeEscrow, inboxIdentity, inboxExpiryTimer, tokenTargetSelect, budgetLoadedToken = "", budgetLoadedFrozen = null, relayerCapabilities = {};
+  let browserProvider, publicProvider, signer, account = "", activeWalletProvider, remoteWalletProvider, okxUiPromise, okxSdkScriptPromise, packetKind = "equal", activePacketGeneration = "v4", lockKind = "self", confirmAction, scanStream, activeEscrow, inboxIdentity, inboxExpiryTimer, tokenTargetSelect, budgetLoadedToken = "", budgetLoadedFrozen = null, relayerCapabilities = {};
   const caseKeys = new Map();
   const INBOX_SESSION_KEY="tapeflow-x-inbox-session-v1",INBOX_SESSION_MS=30*60*1000;
   const savedSettings = readJSON(KEY,{});
@@ -368,10 +369,22 @@
     };
     return provider;
   }
+  function loadOkxConnectSdk(){
+    if(window.OKXTonConnectUISdk?.OKXUniversalConnectUI)return Promise.resolve(window.OKXTonConnectUISdk);
+    if(okxSdkScriptPromise)return okxSdkScriptPromise;
+    okxSdkScriptPromise=new Promise((resolve,reject)=>{
+      const script=document.createElement("script");
+      script.src=`./vendor/okxconnect_ui.min.js?release=2.9.1`;script.async=true;script.dataset.tapeflowWalletSdk="okx-connect";
+      script.onload=()=>window.OKXTonConnectUISdk?.OKXUniversalConnectUI?resolve(window.OKXTonConnectUISdk):reject(new Error("OKX Connect 组件加载不完整"));
+      script.onerror=()=>reject(new Error("OKX Connect 组件加载失败，请检查网络后重试"));
+      document.head.appendChild(script);
+    }).catch(error=>{okxSdkScriptPromise=undefined;throw error});
+    return okxSdkScriptPromise;
+  }
   async function getOkxUi(){
     if(okxUiPromise)return okxUiPromise;
     okxUiPromise=(async()=>{
-      const sdk=window.OKXTonConnectUISdk;
+      const sdk=await loadOkxConnectSdk();
       if(!sdk?.OKXUniversalConnectUI)throw new Error("OKX Connect 组件加载失败，请刷新页面重试");
       const ui=await sdk.OKXUniversalConnectUI.init({
         dappMetaData:{name:"TapeFlow",icon:new URL("./assets/tapeflow-connect.png",location.href).href},
@@ -407,6 +420,7 @@
       if(!session&&!ui.connected?.())return;
       remoteWalletProvider=createOkxEip1193(ui);
       await installWalletProvider(remoteWalletProvider,false);
+      localStorage.setItem(OKX_REMOTE_SESSION_KEY,"1");
       $("wallet-dialog").close();toast("OKX Wallet 已授权连接");
     }catch(error){if(!$("wallet-dialog").open)$("wallet-dialog").showModal();setMessage("wallet-connect-status",errText(error),"error")}
   }
@@ -419,6 +433,7 @@
   async function restoreConnectedWallet(){
     if(localStorage.getItem(WALLET_DISCONNECTED_KEY)==="1")return;
     if(window.ethereum){const list=await window.ethereum.request({method:"eth_accounts"});if(list?.length){await installWalletProvider(window.ethereum,false);return}}
+    if(localStorage.getItem(OKX_REMOTE_SESSION_KEY)!=="1")return;
     const ui=await getOkxUi();
     if(!ui.connected?.()||!sessionAccounts(ui.session).length)return;
     remoteWalletProvider=createOkxEip1193(ui);await installWalletProvider(remoteWalletProvider,false);
@@ -439,7 +454,7 @@
     $("wallet-account-address").textContent=account;$("wallet-button").setAttribute("aria-expanded","true");$("wallet-account-dialog").showModal();
   }
   function clearWalletState(message="钱包已断开"){
-    clearInboxSession("钱包已断开",true);localStorage.setItem(WALLET_DISCONNECTED_KEY,"1");account="";signer=undefined;browserProvider=undefined;activeWalletProvider=undefined;remoteWalletProvider=undefined;renderWalletState();$("wallet-account-dialog").close();toast(message);loadPricePublisherStatus().catch(()=>{});
+    clearInboxSession("钱包已断开",true);localStorage.setItem(WALLET_DISCONNECTED_KEY,"1");localStorage.removeItem(OKX_REMOTE_SESSION_KEY);account="";signer=undefined;browserProvider=undefined;activeWalletProvider=undefined;remoteWalletProvider=undefined;renderWalletState();$("wallet-account-dialog").close();toast(message);loadPricePublisherStatus().catch(()=>{});
   }
   async function disconnectWallet(){
     try{if(activeWalletProvider?.isTapeFlowOkxConnect){const ui=await getOkxUi();await ui.disconnect?.()}}catch{}finally{clearWalletState("已断开 TapeFlow 钱包连接")}
