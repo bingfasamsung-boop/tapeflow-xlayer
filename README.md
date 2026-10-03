@@ -31,8 +31,8 @@ The transistor supply, unit price, cap, and circuit values above are public on-c
 
 ## Product features
 
-- **Wallet payments** — send native OKB or supported tokens to a wallet or compatible contract.
-- **QR receive and scan** — create payment requests and scan compatible payment codes.
+- **Wallet payments** — send native OKB or supported tokens to a wallet or compatible contract. OKX Connect supports cross-device QR authorization, same-device app handoff, session restoration, and explicit disconnect without moving the web app into the wallet browser.
+- **QR receive and scan** — create payment requests and scan compatible payment codes. The scanner uses native browser decoding when available and a local JavaScript fallback for wallet browsers that only allow image selection.
 - **Red packets** — normal, random, designated-recipient, and password-based packets. Supported public claim flows let the recipient claim without holding gas; the sender funds the service cost.
 - **Escrow payments** — escrowed settlement with configured refund and dispute paths.
 - **Conditional locks** — time conditions, price conditions, or combined time/price rules.

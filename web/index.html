@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./features.css?v=260" />
   <link rel="stylesheet" href="./budget.css?v=210" />
   <link rel="stylesheet" href="./privacy.css?v=260" />
-  <link rel="stylesheet" href="./wallet-menu.css?v=280" />
+  <link rel="stylesheet" href="./wallet-menu.css?v=290" />
 </head>
 <body>
   <div id="splash" class="splash" aria-label="TapeFlow X">
@@ -536,19 +536,21 @@
 
   <dialog id="token-dialog"><form id="token-form" class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="token-dialog">×</button><span class="dialog-kicker">CUSTOM TOKEN</span><h2>添加X Layer代币</h2><label><span>代币合约地址</span><input id="token-address" required placeholder="0x..." /></label><button class="primary wide" type="submit">读取并添加</button><p id="token-status" class="message"></p></form></dialog>
 
-  <dialog id="scan-dialog"><div class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="scan-dialog">×</button><span class="dialog-kicker">TAPEFLOW SCAN</span><h2>扫一扫</h2><p class="scan-help">扫描 TapeFlow 付款码、红包码或锁仓码，自动打开对应功能。</p><video id="scan-video" playsinline muted></video><div class="scan-actions"><button id="camera-scan" class="primary" type="button">打开摄像头</button><label class="upload-button">选择二维码图片<input id="scan-file" type="file" accept="image/*" /></label></div><textarea id="scan-text" rows="3" placeholder="也可以粘贴 TapeFlow 链接"></textarea><button id="parse-scan" class="ghost wide" type="button">打开对应功能</button><p id="scan-status" class="message"></p></div></dialog>
+  <dialog id="scan-dialog"><div class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="scan-dialog">×</button><span class="dialog-kicker">TAPEFLOW SCAN</span><h2>扫一扫</h2><p class="scan-help">扫描 TapeFlow 付款码、红包码或锁仓码，自动打开对应功能。OKX 等钱包浏览器不能调用摄像头时，可直接从相册选择二维码原图。</p><video id="scan-video" playsinline muted></video><div class="scan-actions"><button id="camera-scan" class="primary" type="button">打开摄像头</button><label class="upload-button">从相册识别<input id="scan-file" type="file" accept="image/*" /></label></div><textarea id="scan-text" rows="3" placeholder="也可以粘贴 TapeFlow 链接"></textarea><button id="parse-scan" class="ghost wide" type="button">打开对应功能</button><p id="scan-status" class="message"></p></div></dialog>
 
-  <dialog id="wallet-dialog"><div class="dialog-card wallet-connect-card"><button class="dialog-close" type="button" data-close-dialog="wallet-dialog">×</button><span class="dialog-kicker">CONNECT WALLET</span><h2>连接 X Layer 钱包</h2><p>手机可一键呼出 OKX Wallet；电脑可用钱包扫描二维码，在钱包内打开当前 TapeFlow 地址。</p><div id="wallet-connect-qr" class="wallet-connect-qr"></div><button id="open-okx-wallet" class="primary wide" type="button">在 OKX Wallet 中打开</button><button id="copy-dapp-url" class="ghost wide" type="button">复制当前网站地址</button><small>连接只读取公开地址；付款、授权和签名仍需你在钱包中逐次确认。</small><p id="wallet-connect-status" class="message"></p></div></dialog>
+  <dialog id="wallet-dialog"><div class="dialog-card wallet-connect-card"><button class="dialog-close" type="button" data-close-dialog="wallet-dialog">×</button><span class="dialog-kicker">OKX CONNECT</span><h2>连接 X Layer 钱包</h2><p class="wallet-connect-lead">钱包只负责授权与签名，TapeFlow 页面继续留在你当前使用的浏览器。</p><div class="wallet-connect-options"><button id="wallet-connect-cross" class="wallet-connect-option" type="button"><i>▦</i><span><b>跨设备扫码授权</b><small>A 设备保持当前页面；用 B 手机 OKX Wallet 扫码并确认，随后继续在 A 设备操作。</small></span><em>推荐</em></button><button id="wallet-connect-local" class="wallet-connect-option" type="button"><i>↗</i><span><b>唤起本机 OKX App 授权</b><small>临时跳转钱包完成授权或签名；不会把 TapeFlow 网站搬进钱包浏览器。</small></span></button></div><div class="wallet-connect-safety"><b>你始终掌控钱包</b><span>连接只读取公开地址；每笔付款、授权和签名仍需在钱包中逐次确认。</span></div><p id="wallet-connect-status" class="message"></p></div></dialog>
 
   <dialog id="wallet-account-dialog"><div class="dialog-card wallet-account-card"><button class="dialog-close" type="button" data-close-dialog="wallet-account-dialog">×</button><span class="dialog-kicker">CONNECTED WALLET</span><h2>已连接的钱包</h2><div class="connected-wallet-address"><span>当前地址</span><code id="wallet-account-address"></code></div><button id="copy-wallet-address" class="ghost wide" type="button">复制钱包地址</button><button id="disconnect-wallet" class="wallet-disconnect wide" type="button">断开钱包连接</button><small>只断开 TapeFlow 当前会话，不会删除浏览器钱包中的账户或资产。</small></div></dialog>
 
   <div id="toast" class="toast"></div>
   <script src="./vendor/ethers.umd.min.js"></script>
   <script src="./vendor/qrcode-generator.min.js"></script>
+  <script src="./vendor/jsQR.js"></script>
+  <script src="./vendor/okxconnect_ui.min.js"></script>
   <script src="./vendor/tapeflow-tapesend.js"></script>
   <script src="./vendor/tapeflow-case-crypto.js"></script>
-  <script src="./vendor/tapeflow-privacy-sdk.js?release=2.8.0"></script>
-  <script src="./config.js?release=2.8.0"></script>
-  <script src="./app.js?release=2.8.0"></script>
+  <script src="./vendor/tapeflow-privacy-sdk.js?release=2.9.0"></script>
+  <script src="./config.js?release=2.9.0"></script>
+  <script src="./app.js?release=2.9.0"></script>
 </body>
 </html>

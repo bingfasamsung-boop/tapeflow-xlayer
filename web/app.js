@@ -149,7 +149,7 @@
     "function validate(address payer,address token,address recipient,uint256 amount,bytes32 referenceId,bytes policyData) returns(bool)"
   ];
 
-  let browserProvider, publicProvider, signer, account = "", packetKind = "equal", activePacketGeneration = "v4", lockKind = "self", confirmAction, scanStream, activeEscrow, inboxIdentity, inboxExpiryTimer, tokenTargetSelect, budgetLoadedToken = "", budgetLoadedFrozen = null, relayerCapabilities = {};
+  let browserProvider, publicProvider, signer, account = "", activeWalletProvider, remoteWalletProvider, okxUiPromise, packetKind = "equal", activePacketGeneration = "v4", lockKind = "self", confirmAction, scanStream, activeEscrow, inboxIdentity, inboxExpiryTimer, tokenTargetSelect, budgetLoadedToken = "", budgetLoadedFrozen = null, relayerCapabilities = {};
   const caseKeys = new Map();
   const INBOX_SESSION_KEY="tapeflow-x-inbox-session-v1",INBOX_SESSION_MS=30*60*1000;
   const savedSettings = readJSON(KEY,{});
@@ -341,33 +341,113 @@
     $("language-button").textContent=lang==="en"?"中":"EN";localStorage.setItem("tapeflow-x-lang",lang);
   }
 
-  async function ensureWallet(){
-    if(!window.ethereum){showWalletConnect();throw new Error("未检测到钱包，已为你打开手机钱包连接方式");}
-    browserProvider = new E.BrowserProvider(window.ethereum);
-    await switchXLayer();
-    const list=await browserProvider.send("eth_requestAccounts",[]);account=E.getAddress(list[0]);signer=await browserProvider.getSigner();localStorage.removeItem(WALLET_DISCONNECTED_KEY);
+  function sessionAccounts(session){
+    const rows=session?.namespaces?.eip155?.accounts||[];
+    return rows.map(value=>String(value).split(":").pop()).filter(value=>E.isAddress(value)).map(value=>E.getAddress(value));
+  }
+  function createOkxEip1193(ui){
+    const listeners=new Map();
+    const emit=(event,payload)=>(listeners.get(event)||new Set()).forEach(fn=>{try{fn(payload)}catch{}});
+    const provider={
+      isTapeFlowOkxConnect:true,
+      on(event,fn){if(!listeners.has(event))listeners.set(event,new Set());listeners.get(event).add(fn);return provider},
+      removeListener(event,fn){listeners.get(event)?.delete(fn);return provider},
+      async request({method,params=[]}){
+        if(method==="eth_accounts"||method==="eth_requestAccounts")return sessionAccounts(ui.session);
+        if(method==="eth_chainId")return CFG.chainHex;
+        if(method==="net_version")return String(CFG.chainId);
+        if(method==="wallet_switchEthereumChain"){
+          const requested=Number.parseInt(String(params?.[0]?.chainId||CFG.chainHex),16);
+          if(requested!==CFG.chainId)throw Object.assign(new Error("TapeFlow 当前仅支持 X Layer 主网"),{code:4902});
+          ui.setDefaultChain?.(`eip155:${CFG.chainId}`);return null;
+        }
+        if(method==="wallet_addEthereumChain")return null;
+        return ui.request({method,params},`eip155:${CFG.chainId}`);
+      },
+      emit
+    };
+    return provider;
+  }
+  async function getOkxUi(){
+    if(okxUiPromise)return okxUiPromise;
+    okxUiPromise=(async()=>{
+      const sdk=window.OKXTonConnectUISdk;
+      if(!sdk?.OKXUniversalConnectUI)throw new Error("OKX Connect 组件加载失败，请刷新页面重试");
+      const ui=await sdk.OKXUniversalConnectUI.init({
+        dappMetaData:{name:"TapeFlow",icon:new URL("./assets/tapeflow-connect.png",location.href).href},
+        actionsConfiguration:{modals:"all",returnStrategy:"none"},
+        uiPreferences:{theme:sdk.THEME?.LIGHT||"LIGHT"},
+        language:document.documentElement.lang==="en"?"en_US":"zh_CN",
+        restoreConnection:true
+      });
+      ui.on?.("session_update",session=>{if(remoteWalletProvider){const accounts=sessionAccounts(session);remoteWalletProvider.emit("accountsChanged",accounts);remoteWalletProvider.emit("chainChanged",CFG.chainHex);handleWalletAccountsChanged(accounts,remoteWalletProvider)}});
+      ui.on?.("accountChanged",session=>{if(remoteWalletProvider){const accounts=sessionAccounts(session);remoteWalletProvider.emit("accountsChanged",accounts);handleWalletAccountsChanged(accounts,remoteWalletProvider)}});
+      ui.on?.("session_delete",()=>{if(activeWalletProvider?.isTapeFlowOkxConnect)clearWalletState("钱包会话已断开")});
+      ui.on?.("display_uri",()=>setMessage("wallet-connect-status","授权码已生成：请用另一台手机的 OKX Wallet 扫描，A 设备页面会保持不动。"));
+      return ui;
+    })().catch(error=>{okxUiPromise=undefined;throw error});
+    return okxUiPromise;
+  }
+  async function installWalletProvider(provider,requestAccounts=false){
+    activeWalletProvider=provider;
+    browserProvider=new E.BrowserProvider(provider);
+    await switchXLayer(provider);
+    const method=requestAccounts?"eth_requestAccounts":"eth_accounts";
+    const list=await provider.request({method,params:[]});
+    if(!list?.length)throw new Error("钱包没有返回可用账户");
+    account=E.getAddress(list[0]);signer=await browserProvider.getSigner();localStorage.removeItem(WALLET_DISCONNECTED_KEY);
     renderWalletState();await restoreInboxSession();await refreshBalance();return signer;
   }
+  async function connectOkxWallet(mode="cross"){
+    try{
+      setMessage("wallet-connect-status",mode==="local"?"正在唤起本机 OKX App，仅用于授权；完成后请返回当前浏览器。":"正在生成跨设备授权码；请让 B 手机的 OKX Wallet 扫描并确认。","");
+      const ui=await getOkxUi();
+      $("wallet-dialog").close();
+      const session=await ui.openModal({namespaces:{eip155:{chains:[`eip155:${CFG.chainId}`],defaultChain:String(CFG.chainId),rpcMap:{[String(CFG.chainId)]:CFG.rpcUrls[0]}}}});
+      if(!session&&!ui.connected?.())return;
+      remoteWalletProvider=createOkxEip1193(ui);
+      await installWalletProvider(remoteWalletProvider,false);
+      $("wallet-dialog").close();toast("OKX Wallet 已授权连接");
+    }catch(error){if(!$("wallet-dialog").open)$("wallet-dialog").showModal();setMessage("wallet-connect-status",errText(error),"error")}
+  }
+  async function ensureWallet(){
+    if(account&&signer)return signer;
+    if(remoteWalletProvider){const list=await remoteWalletProvider.request({method:"eth_accounts"});if(list?.length)return installWalletProvider(remoteWalletProvider,false)}
+    if(window.ethereum)return installWalletProvider(window.ethereum,true);
+    showWalletConnect();throw new Error("请选择跨设备扫码或本机 OKX App 授权");
+  }
   async function restoreConnectedWallet(){
-    if(!window.ethereum||localStorage.getItem(WALLET_DISCONNECTED_KEY)==="1")return;
-    const list=await window.ethereum.request({method:"eth_accounts"});if(!list?.length)return;
-    browserProvider=new E.BrowserProvider(window.ethereum);account=E.getAddress(list[0]);signer=await browserProvider.getSigner();
-    renderWalletState();await restoreInboxSession();
+    if(localStorage.getItem(WALLET_DISCONNECTED_KEY)==="1")return;
+    if(window.ethereum){const list=await window.ethereum.request({method:"eth_accounts"});if(list?.length){await installWalletProvider(window.ethereum,false);return}}
+    const ui=await getOkxUi();
+    if(!ui.connected?.()||!sessionAccounts(ui.session).length)return;
+    remoteWalletProvider=createOkxEip1193(ui);await installWalletProvider(remoteWalletProvider,false);
   }
   function renderWalletState(){
     $("wallet-label").textContent=short(account);$("summary-account").textContent=short(account);$("wallet-button").classList.toggle("connected",Boolean(account));$("wallet-button").setAttribute("aria-expanded","false");
     if(!account)$("okb-balance").textContent="—";
   }
+  async function handleWalletAccountsChanged(accounts,provider){
+    if(activeWalletProvider!==provider)return;
+    clearInboxSession("需要重新解锁",true);signer=undefined;
+    if(localStorage.getItem(WALLET_DISCONNECTED_KEY)==="1"||!accounts?.[0]){account="";browserProvider=undefined;renderWalletState();return}
+    try{account=E.getAddress(accounts[0]);browserProvider=new E.BrowserProvider(provider);signer=await browserProvider.getSigner();renderWalletState();await refreshBalance()}catch{account="";signer=undefined;browserProvider=undefined;renderWalletState()}
+    loadPricePublisherStatus().catch(()=>{});
+  }
   function showWalletAccount(){
     if(!account)return;
     $("wallet-account-address").textContent=account;$("wallet-button").setAttribute("aria-expanded","true");$("wallet-account-dialog").showModal();
   }
-  function disconnectWallet(){
-    clearInboxSession("钱包已断开",true);localStorage.setItem(WALLET_DISCONNECTED_KEY,"1");account="";signer=undefined;browserProvider=undefined;renderWalletState();$("wallet-account-dialog").close();toast("已断开 TapeFlow 钱包连接");loadPricePublisherStatus().catch(()=>{});
+  function clearWalletState(message="钱包已断开"){
+    clearInboxSession("钱包已断开",true);localStorage.setItem(WALLET_DISCONNECTED_KEY,"1");account="";signer=undefined;browserProvider=undefined;activeWalletProvider=undefined;remoteWalletProvider=undefined;renderWalletState();$("wallet-account-dialog").close();toast(message);loadPricePublisherStatus().catch(()=>{});
   }
-  async function switchXLayer(){
-    try{await window.ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:CFG.chainHex}]})}
-    catch(e){if(e.code!==4902 && e.code!==-32603)throw e;await window.ethereum.request({method:"wallet_addEthereumChain",params:[{chainId:CFG.chainHex,chainName:CFG.chainName,nativeCurrency:CFG.nativeCurrency,rpcUrls:CFG.rpcUrls,blockExplorerUrls:[CFG.explorer]}]})}
+  async function disconnectWallet(){
+    try{if(activeWalletProvider?.isTapeFlowOkxConnect){const ui=await getOkxUi();await ui.disconnect?.()}}catch{}finally{clearWalletState("已断开 TapeFlow 钱包连接")}
+  }
+  async function switchXLayer(provider=activeWalletProvider||window.ethereum){
+    if(!provider)throw new Error("钱包连接不可用");
+    try{await provider.request({method:"wallet_switchEthereumChain",params:[{chainId:CFG.chainHex}]})}
+    catch(e){if(e.code!==4902 && e.code!==-32603)throw e;await provider.request({method:"wallet_addEthereumChain",params:[{chainId:CFG.chainHex,chainName:CFG.chainName,nativeCurrency:CFG.nativeCurrency,rpcUrls:CFG.rpcUrls,blockExplorerUrls:[CFG.explorer]}]})}
   }
   async function refreshBalance(){if(!account||!browserProvider)return;const b=await browserProvider.getBalance(account);$("okb-balance").textContent=`${Number(E.formatEther(b)).toLocaleString(undefined,{maximumFractionDigits:5})} OKB`}
   function hub(write=true){return new E.Contract(configured("hub"),HUB_ABI,write?signer:browserProvider)}
@@ -1130,9 +1210,10 @@
   function makeLink(kind,data){return `${location.origin}${location.pathname}#${kind}=${b64urlJson(data)}`}
   function qrData(text){const q=window.qrcode(0,"M");q.addData(text);q.make();return q.createDataURL(6,10)}
   function showQR(id,link,title,sub,copy){const n=$(id);n.classList.remove("empty");n.innerHTML=`<img src="${qrData(link)}" alt="QR"><h2>${title}</h2><p>${sub}</p><button class="ghost" type="button">${copy?"复制付款链接":"复制链接"}</button>`;n.querySelector("button").onclick=()=>navigator.clipboard.writeText(link).then(()=>toast("链接已复制"))}
-  function currentDappUrl(){return location.href.split("#")[0]+"#home"}
-  function okxDappLink(){return `okx://wallet/dapp/url?dappUrl=${encodeURIComponent(currentDappUrl())}`}
-  function showWalletConnect(){const url=currentDappUrl(),n=$("wallet-connect-qr");n.innerHTML=`<img src="${qrData(url)}" alt="使用OKX Wallet扫描打开TapeFlow"><b>用 OKX Wallet 扫描</b><small>${escapeHtml(location.host)}</small>`;setMessage("wallet-connect-status",location.hostname==="127.0.0.1"||location.hostname==="localhost"?"当前是本机预览地址，手机无法访问；部署到 DeWEB 后二维码会自动变成正式地址。":"扫码后在钱包内打开，再点击连接钱包。");$("wallet-dialog").showModal()}
+  function showWalletConnect(){
+    setMessage("wallet-connect-status","选择一种授权方式。跨设备扫码不会把 A 设备页面转移到 B 手机。","");
+    $("wallet-dialog").showModal();
+  }
   function showPacketShare(id,link,generation=activePacketGeneration){const code=packetCode(id,generation),n=$("packet-detail");n.insertAdjacentHTML("beforeend",`<img class="packet-qr" src="${qrData(link)}" alt="红包二维码"><button class="ghost" type="button">复制红包链接</button>`);n.querySelector("button").onclick=()=>navigator.clipboard.writeText(link).then(()=>toast(`${code} 链接已复制`))}
   async function encrypt(text,password){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),base=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveKey"]),key=await crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:210000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt"]),cipher=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,new TextEncoder().encode(text));return{alg:"AES-GCM/PBKDF2-210k",salt:E.hexlify(salt),iv:E.hexlify(iv),cipher:E.hexlify(new Uint8Array(cipher))}}
 
@@ -1235,8 +1316,8 @@
   $("wallet-account-dialog").addEventListener("close",()=>$("wallet-button").setAttribute("aria-expanded","false"));
   $("copy-wallet-address").onclick=async()=>{try{await navigator.clipboard.writeText(account);toast("钱包地址已复制")}catch{toast("复制失败，请手动复制地址")}};
   $("disconnect-wallet").onclick=disconnectWallet;
-  $("open-okx-wallet").onclick=()=>{location.href=okxDappLink()};
-  $("copy-dapp-url").onclick=()=>navigator.clipboard.writeText(currentDappUrl()).then(()=>setMessage("wallet-connect-status","网站地址已复制，请粘贴到 OKX Wallet 的 DApp 浏览器。","success"));
+  $("wallet-connect-cross").onclick=()=>connectOkxWallet("cross");
+  $("wallet-connect-local").onclick=()=>connectOkxWallet("local");
   function stopScanner(){if(scanStream){scanStream.getTracks().forEach(track=>track.stop());scanStream=null}const video=$("scan-video");video.pause();video.srcObject=null;video.style.display="none"}
   const openScanner=()=>{setMessage("scan-status","");$("scan-text").value="";$("scan-dialog").showModal()};
   $("scan-button").onclick=openScanner;
@@ -1247,8 +1328,45 @@
   $("copy-developer-wallet").onclick=async()=>{try{await navigator.clipboard.writeText($("developer-wallet").textContent);toast("开发者钱包地址已复制")}catch{toast("复制失败，请手动复制地址")}};
   $("copy-api-example").onclick=()=>navigator.clipboard.writeText(`window.TapeFlowX.createPayment({chainId:196,token:"native",recipient:"0x...",amount:"1.5",orderId:"ORDER-001"})`).then(()=>toast("示例已复制"));
   $("language-button").onclick=()=>{const next=document.documentElement.lang==="en"?"zh-CN":"en";setLanguage(next);toast(next==="en"?"Switched to English":"已切换中文")};
-  async function scanCamera(){try{if(!("BarcodeDetector" in window))throw new Error("当前浏览器不支持网页内摄像头扫码，请用手机相机扫描，或选择二维码图片/粘贴链接");stopScanner();scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}});const v=$("scan-video");v.srcObject=scanStream;v.style.display="block";await v.play();setMessage("scan-status","请将二维码放入画面中");const d=new BarcodeDetector({formats:["qr_code"]});const tick=async()=>{if(!scanStream)return;try{const r=await d.detect(v);if(r[0]){parseRequest(r[0].rawValue);return}}catch(e){stopScanner();setMessage("scan-status",errText(e),"error");return}requestAnimationFrame(tick)};tick()}catch(e){stopScanner();setMessage("scan-status",errText(e),"error")}}
-  async function scanImage(e){try{if(!e.target.files?.[0])return;if(!("BarcodeDetector" in window))throw new Error("当前浏览器不支持图片识别，请用手机相机扫描或粘贴链接");const b=await createImageBitmap(e.target.files[0]),r=await new BarcodeDetector({formats:["qr_code"]}).detect(b);b.close?.();if(!r[0])throw new Error("图片中没有识别到二维码");parseRequest(r[0].rawValue)}catch(x){setMessage("scan-status",errText(x),"error")}finally{e.target.value=""}}
+  function qrCanvas(source,width,height){
+    const max=1100,scale=Math.min(1,max/Math.max(width,height)),canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(width*scale));canvas.height=Math.max(1,Math.round(height*scale));
+    const context=canvas.getContext("2d",{willReadFrequently:true});context.drawImage(source,0,0,canvas.width,canvas.height);return{canvas,context};
+  }
+  function decodeQrCanvas(canvas,context){
+    if(typeof window.jsQR!=="function")return "";
+    const image=context.getImageData(0,0,canvas.width,canvas.height),result=window.jsQR(image.data,image.width,image.height,{inversionAttempts:"attemptBoth"});return result?.data||"";
+  }
+  async function decodeQrSource(source,width,height){
+    if("BarcodeDetector" in window){try{const result=await new BarcodeDetector({formats:["qr_code"]}).detect(source);if(result[0]?.rawValue)return result[0].rawValue}catch{}}
+    const {canvas,context}=qrCanvas(source,width,height);return decodeQrCanvas(canvas,context);
+  }
+  async function scanCamera(){
+    try{
+      if(!navigator.mediaDevices?.getUserMedia)throw new Error("当前浏览器禁止网页调用摄像头，请从相册选择二维码图片或粘贴链接");
+      stopScanner();scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}}});
+      const video=$("scan-video");video.srcObject=scanStream;video.style.display="block";await video.play();setMessage("scan-status","请将二维码放入画面中；若钱包浏览器禁用摄像头，可从相册选择图片。","");
+      let last=0,busy=false;
+      const tick=async time=>{
+        if(!scanStream)return;
+        if(!busy&&video.readyState>=2&&time-last>180){busy=true;last=time;try{const value=await decodeQrSource(video,video.videoWidth,video.videoHeight);if(value){parseRequest(value);return}}catch(error){stopScanner();setMessage("scan-status",errText(error),"error");return}finally{busy=false}}
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }catch(error){stopScanner();setMessage("scan-status",`${errText(error)}。也可以从相册选择二维码图片或粘贴链接。`,"error")}
+  }
+  async function scanImage(event){
+    const file=event.target.files?.[0];
+    try{
+      if(!file)return;
+      setMessage("scan-status","正在识别二维码图片…","");
+      const url=URL.createObjectURL(file),image=new Image();
+      try{
+        await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error("图片读取失败"));image.src=url});
+        const value=await decodeQrSource(image,image.naturalWidth,image.naturalHeight);if(!value)throw new Error("图片中没有识别到二维码，请选择清晰、完整的原图");parseRequest(value);
+      }finally{URL.revokeObjectURL(url)}
+    }catch(error){setMessage("scan-status",errText(error),"error")}finally{event.target.value=""}
+  }
   function parsedTapeFlowLink(link){
     const raw=String(link??"").trim();if(!raw)throw new Error("请扫描二维码或粘贴 TapeFlow 链接");let hash=raw;
     if(/^[a-z][a-z0-9+.-]*:/i.test(raw)){const url=new URL(raw),host=url.hostname.toLowerCase(),trusted=url.origin===location.origin||host==="tapeflow.world"||host.endsWith(".tapeflow.world")||host==="tapeflow.katiemia543789.chatgpt.site";if(url.protocol!=="https:"&&!trusted)throw new Error("只支持安全的 TapeFlow 链接");if(!trusted)throw new Error("这不是 TapeFlow 官方二维码");hash=url.hash}
@@ -1267,7 +1385,7 @@
     openPayment(options){location.href=this.createPayment(options)},
     version:CFG.version
   };
-  if(window.ethereum){window.ethereum.on?.("accountsChanged",a=>{clearInboxSession("需要重新解锁",true);signer=undefined;browserProvider=undefined;if(localStorage.getItem(WALLET_DISCONNECTED_KEY)==="1"){account=""}else{account=a[0]?E.getAddress(a[0]):""}renderWalletState();loadPricePublisherStatus().catch(()=>{})});window.ethereum.on?.("chainChanged",()=>location.reload())}
+  if(window.ethereum){window.ethereum.on?.("accountsChanged",accounts=>handleWalletAccountsChanged(accounts,window.ethereum));window.ethereum.on?.("chainChanged",()=>{if(activeWalletProvider===window.ethereum)location.reload()})}
   await restoreConnectedWallet().catch(()=>{});
   try{await handleOidcCallback()}catch(e){setMessage("claim-status",errText(e),"error");history.replaceState(null,"",`${location.pathname}#packet`)}
   await loadRelayerCapabilities();
