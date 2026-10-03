@@ -1,0 +1,20 @@
+{
+  "name": "tapeflow-x-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:xlayer": "hardhat run scripts/deploy.js --network xlayer",
+    "deploy:escrow:xlayer": "hardhat run scripts/deploy-escrow-v2.js --network xlayer",
+    "deploy:packet:xlayer": "hardhat run scripts/deploy-packet-v2.js --network xlayer",
+    "deploy:lock:xlayer": "hardhat run scripts/deploy-lock.js --network xlayer"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.8",
+    "@openzeppelin/contracts": "5.0.2",
+    "chai": "4.5.0",
+    "ethers": "6.13.4",
+    "hardhat": "2.22.17"
+  }
+}

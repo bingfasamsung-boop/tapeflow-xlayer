@@ -1,0 +1,178 @@
+{
+  "network": "X Layer Mainnet",
+  "chainId": 196,
+  "deployer": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+  "feeRecipient": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+  "contracts": {
+    "hub": {
+      "name": "TapeFlowXHubV1",
+      "address": "0xD0FeCB3371d5DdCde9bfeF436D1E0DFBa8B8e074",
+      "transactionHash": "0x93e56f9f56efc48f77560359cc22394b8674df53f58ddd373875b8baee180ff5",
+      "blockNumber": 71665545,
+      "runtimeCodeBytes": 13723,
+      "privacyServiceFeeBps": 100,
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "policy": {
+      "name": "TapeFlowBudgetPolicyV1",
+      "address": "0xf3abe290C5086b39e7E25A8786A18Ce53E08e47A",
+      "transactionHash": "0x8ab9d70dba150529e532b99ca026f7c4ad2a84d17375eaece20464daaae7d8c3",
+      "blockNumber": 71665818,
+      "runtimeCodeBytes": 1595,
+      "hub": "0xD0FeCB3371d5DdCde9bfeF436D1E0DFBa8B8e074",
+      "status": "deployed-bytecode-and-immutable-hub-verified"
+    },
+    "intent": {
+      "name": "TapeFlowCrossChainIntentV1",
+      "address": "0xA0b0308bE0bD57700ac1C6Abdf0Df80Fa46cB479",
+      "transactionHash": "0x95dfe351baf88697a8aefde7be8e09fc6c25678e9618dc3e82d284f7f5288858",
+      "blockNumber": 71666001,
+      "runtimeCodeBytes": 2884,
+      "status": "deployed-bytecode-verified"
+    },
+    "circuitPolicy": {
+      "name": "TapeFlowCircuitBudgetPolicyV1",
+      "address": "0x5b1522026b4AA6431674529692Fc4d756B39685A",
+      "runtimeCodeBytes": 2636,
+      "hub": "0xD0FeCB3371d5DdCde9bfeF436D1E0DFBa8B8e074",
+      "tapeOutProject": "0x173b0C58d08e053ae6a2c2Ffe4bB51C37C03C9A3",
+      "circuitId": 1,
+      "circuitName": "1.2.247",
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "circuitPolicyV2": {
+      "name": "TapeFlowCircuitBudgetPolicyV2",
+      "address": "0x73Bebf28704e0D4e56eDD559291484c18C091Ed5",
+      "runtimeCodeBytes": 2987,
+      "hub": "0xD0FeCB3371d5DdCde9bfeF436D1E0DFBa8B8e074",
+      "tapeOutProject": "0x173b0C58d08e053ae6a2c2Ffe4bB51C37C03C9A3",
+      "circuitId": 1,
+      "circuitName": "1.2.247",
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "escrow": {
+      "name": "TapeFlowEscrowV2",
+      "address": "0x1913374b8B09C02eE1aC85d5215785aaeB99ca04",
+      "runtimeCodeBytes": 13873,
+      "feeRecipient": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "defaultArbiter": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "serviceFeeBps": 100,
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "packetV2": {
+      "name": "TapeFlowPacketHubV2",
+      "address": "0x29Ce9fb40f65E90B4bA6DA3dA26Deb1e7A492c7C",
+      "transactionHash": "0xf6e663547116f7fe81d4284911dff0175d0bc43899553e0baf5f7a12e1a16059",
+      "blockNumber": 71724599,
+      "runtimeCodeBytes": 11505,
+      "feeRecipient": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "claimAuthorizer": "0xC4537A2e9401CB4425F06ac06A196a0A0A8f11a8",
+      "serviceFeeBps": 10,
+      "supersedes": {
+        "address": "0xd9e8E9f2Ba084e55093908AD337F8eD1C9B268Eb",
+        "transactionHash": "0x02ecd1266097101ae549ea9341217ea300b8cfdb1b1884ee5a554743479fdd36",
+        "blockNumber": 71675725,
+        "claimAuthorizer": "0xD6AEbF9Cc39D67e9f801135d853dcDccBCD71570"
+      },
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "packetV3": {
+      "name": "TapeFlowPacketHubV3",
+      "address": "0x835013abde483776e80B8D1100935399b5DE7c0a",
+      "feeRecipient": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "claimAuthorizer": "0xC4537A2e9401CB4425F06ac06A196a0A0A8f11a8",
+      "serviceFeeBps": 10,
+      "status": "superseded-by-v4-legacy-reads-remain-supported"
+    },
+    "packetV4": {
+      "name": "TapeFlowPacketHubV4",
+      "address": "0xAEbAc1a120908E8E3a860b2f7a30b4052463C436",
+      "transactionHash": "0xc208602d24b80013c22d68c3fd64a82d8a628763195cc0b04c6f061a1043cc77",
+      "blockNumber": 71938427,
+      "runtimeCodeBytes": 11792,
+      "feeRecipient": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "claimAuthorizer": "0xC4537A2e9401CB4425F06ac06A196a0A0A8f11a8",
+      "serviceFeeBps": 10,
+      "automaticExpiryRefunds": true,
+      "status": "deployed-bytecode-and-immutables-verified-production-enabled"
+    },
+    "priceOracle": {
+      "name": "TapeFlowPriceOracleV1",
+      "address": "0x6fE2CAcE8c8cD8D5f833aC6d9d479E6050e8549c",
+      "transactionHash": "0x545cd766931a7002a3e0c6e87e98004a58cb19c04d51901f697dc86fbf191ff0",
+      "blockNumber": 71676231,
+      "runtimeCodeBytes": 2372,
+      "admin": "0x382e86E61b8C3aD6c32b8EEfdF81C5E9819703e6",
+      "signer": "0xD6AEbF9Cc39D67e9f801135d853dcDccBCD71570",
+      "quote": "USD",
+      "status": "deployed-bytecode-and-immutables-verified"
+    },
+    "lockV2": {
+      "name": "TapeLockV2",
+      "address": "0x83Fe48c687Da4557668a7DAb937B638DD75FdE2f",
+      "runtimeCodeBytes": 5072,
+      "oracle": "0x6fE2CAcE8c8cD8D5f833aC6d9d479E6050e8549c",
+      "status": "deployed-bytecode-and-immutable-oracle-verified"
+    },
+    "privacyP3": {
+      "name": "Privacy Pools P3",
+      "poseidonT3": "0x8ffdA7Ed8B4aD98C2C34f54B76821711F4a6f2C5",
+      "poseidonT4": "0xe393dd7287Db9982e6f845824854Baf8b8e823AF",
+      "entrypointImplementation": "0x891cDf4d7F3ff28CD4a637e3F7931c4f92b7E9fb",
+      "entrypoint": "0x9dD6EE0f62f7D6c5dEb6236973b7176cD0064f60",
+      "nativePool": "0xc3848137D254716676FE71d7DB0324d7675090cE",
+      "commitmentVerifier": null,
+      "withdrawalVerifier": "0xF8875760871240607847BAaD8672164409eEF040",
+      "ragequitVerifier": "0xA5DB9D88427aA8DAa2A2273F0Fb4fE8339102071",
+      "postman": "0xB3b3a5AD0CCE3967754B27d47800019F75b7261D",
+      "relayer": "0x94084A5CD4A6752093c67d85372F4c2846341fab",
+      "deploymentBlock": 72109101,
+      "planStartBlock": 72109038,
+      "finalVerificationBlock": 72109118,
+      "vettingFeeBps": 100,
+      "maxRelayFeeBps": 100,
+      "minimumDepositWei": "100000000000000",
+      "scope": "20160799633545630445630589392938795004329953529261253798197530537574025120707",
+      "planSha256": "f87a3491ebc025cfcd62a2ad99ed96d8a2dd96ed95201a44b69ec34704bce151",
+      "transactionHashes": {
+        "poseidonT3": "0x20e52630b9ad81389580907b7a160f1c3484f57643ac18d428736c82d409875e",
+        "poseidonT4": "0x71e03dc3373db067265dda1508d1cbaddc10e4e8865a2caa69d61a8959b7f110",
+        "withdrawalVerifier": "0xfa6ea011fcb6c8ecbae027b878c9683adc83e9c9444a3a2425ab959ab536b5de",
+        "ragequitVerifier": "0xf1865a9cf3b1bafbacd56ae8dc4d7697437e7d78d89ff4ccb980023238028cae",
+        "entrypointImplementation": "0x38636b9d687c784e20ace8f045ba79cb322340f3b15e51ffd13646e57edf865b",
+        "entrypoint": "0x20b3483e1c6feb5edb946880a73dd9dbb10d8ba341623e505bf8aa965acc7d3b",
+        "nativePool": "0x02e32ad8ed9e9b20dd88986662e36e4ec9efdaad11402accfcb13184b7c53611",
+        "registerNativePool": "0xb00ccfd2108aa48c212ad1112a734edb5412c3909013a33b181a573f5fd8609d"
+      },
+      "runtimeCodeKeccak256": {
+        "poseidonT3": "0x4add57adf71c731d63adc03c0d0cb5a99996e24e58d45641809dc6fb8a379372",
+        "poseidonT4": "0x3398947113cbb65ddfd4bfc2357b43c777e8e04e9fbd674d8db463cc09767161",
+        "withdrawalVerifier": "0x54515096fff858166d381897047ecf92c8b6a595c01416cafa7b9b608670ab67",
+        "ragequitVerifier": "0x1045f87f241bb626b24e0156a478cc0a1d018ad7850c728fd93f10c4b03b27cd",
+        "entrypointImplementation": "0x228bf1033efa2dfd990380e092c34c7480558af7fc65093fdfb35b42e94d66f3",
+        "entrypoint": "0xf15a07c54ab3420101c38795fc919a27ffb05f1a0049070ba3b8f10bae32af97",
+        "nativePool": "0xbf0d1acbfeca4c6bb37baa3443177a83bf99acb096b042122a54a4e440677b82"
+      },
+      "verifiedByRpcs": [
+        "https://xlayerrpc.okx.com",
+        "https://rpc.xlayer.tech"
+      ],
+      "verifiedAt": "2026-10-01T18:15:39.139Z",
+      "initialAssociationSet": {
+        "root": "16857607573674690209017051588217656592437293359555850622409171401795810381984",
+        "ipfsCid": "bafkreidtj7xgmrzbi7gpdg2sjtqpggwoq3ql4oub2armydlwai25zse52u",
+        "transactionHash": "0x23c5fed48cd1b680b76815eb96f3e940e6752e64b48fa1bc46d7ae1f5bb7c8b1",
+        "blockNumber": 72110509
+      },
+      "serviceWalletTargetWei": "5000000000000000",
+      "publicHealthUrl": "https://api.tapeflow.world/privacy/health",
+      "publicRelayerUrl": "https://api.tapeflow.world/privacy-relayer",
+      "status": "deployed-services-healthy-initial-root-verified-canaries-pending"
+    }
+  },
+  "verification": {
+    "rpc": "https://rpc.xlayer.tech",
+    "checkedAt": "2026-09-30",
+    "result": "packet-v4-runtime-bytecode-and-critical-immutables-match; all-current-contracts-recorded"
+  }
+}

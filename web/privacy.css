@@ -1,0 +1,47 @@
+.privacy-balance {
+  margin: 14px 0 17px;
+  padding: 15px;
+  border-radius: 14px;
+  background: #f2efff;
+  color: #5947bc;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+}
+
+.privacy-balance div {
+  display: grid;
+  gap: 4px;
+}
+
+.privacy-balance span,
+.privacy-balance small {
+  font-size: 12px;
+}
+
+.privacy-balance strong {
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.privacy-balance small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+}
+
+.amount-max-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.amount-max-row button {
+  height: auto;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .privacy-balance {
+    grid-template-columns: 1fr;
+  }
+}

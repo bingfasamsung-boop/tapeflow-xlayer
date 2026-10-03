@@ -1,0 +1,15 @@
+.model TapeFlowPolicyGateV1
+.inputs not_frozen single_limit_ok daily_limit_ok allowlist_ok addresses_ok
+.outputs allow
+
+# The TapeOut canvas imports this combinational policy and maps it to NAND gates.
+# Payment is allowed only when all five independently-derived conditions are true.
+.names not_frozen single_limit_ok pair_a
+11 1
+.names daily_limit_ok allowlist_ok pair_b
+11 1
+.names pair_a pair_b first_four
+11 1
+.names first_four addresses_ok allow
+11 1
+.end

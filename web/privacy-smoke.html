@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>TapeFlow P3 SDK smoke</title>
+<pre id="result">loading</pre>
+<script>
+  const out = document.getElementById("result");
+  window.addEventListener("error", event => {
+    out.textContent = `error: ${event.message}\n${event.filename}:${event.lineno}:${event.colno}`;
+  });
+  window.addEventListener("unhandledrejection", event => {
+    out.textContent = `rejection: ${event.reason?.stack || event.reason}`;
+  });
+</script>
+<script src="./vendor/tapeflow-privacy-sdk.js?smoke=2.6.2" onerror="result.textContent='script load failed'"></script>
+<script>
+  if (out.textContent === "loading") {
+    out.textContent = JSON.stringify({
+      global: typeof window.TapeFlowPrivacy,
+      exports: window.TapeFlowPrivacy ? Object.keys(window.TapeFlowPrivacy).sort() : []
+    }, null, 2);
+  }
+</script>
+</html>

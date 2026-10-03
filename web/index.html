@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#1268f3" />
+  <meta name="description" content="TapeFlow X — TapeOut 原生的 X Layer 支付、红包、担保、定时和跨链支付入口。" />
+  <title>TapeFlow X · 让价值在 Tape 生态中流动</title>
+  <link rel="icon" href="./assets/tapeflow-mark.svg" />
+  <link rel="stylesheet" href="./styles.css?v=260" />
+  <link rel="stylesheet" href="./components.css?v=210" />
+  <link rel="stylesheet" href="./layout.css?v=210" />
+  <link rel="stylesheet" href="./nav.css?v=210" />
+  <link rel="stylesheet" href="./features.css?v=260" />
+  <link rel="stylesheet" href="./budget.css?v=210" />
+  <link rel="stylesheet" href="./privacy.css?v=260" />
+  <link rel="stylesheet" href="./wallet-menu.css?v=280" />
+</head>
+<body>
+  <div id="splash" class="splash" aria-label="TapeFlow X">
+    <div class="splash-orbit"></div>
+    <img src="./assets/tapeflow-mark.svg" alt="TapeFlow" />
+    <strong>TapeFlow X</strong>
+    <p>让价值在 Tape 生态中流动</p>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <button class="brand" data-page-link="home">
+        <img src="./assets/tapeflow-mark.svg" alt="" />
+        <span><b>TapeFlow X</b><small>TAPEOUT PAYMENT OS</small></span>
+      </button>
+      <nav>
+        <button class="active" data-page-link="home"><i>⌂</i><span>首页</span></button>
+        <button data-page-link="pay"><i>↗</i><span>付款</span></button>
+        <button data-page-link="receive"><i>⌗</i><span>收款</span></button>
+        <button data-page-link="packet"><i>福</i><span>红包</span></button>
+        <button data-page-link="escrow"><i>盾</i><span>担保</span></button>
+        <button data-page-link="schedule"><i>◷</i><span>定时</span></button>
+        <button data-page-link="lock"><i>锁</i><span>锁仓</span></button>
+        <button data-page-link="veil"><i>◉</i><span>隐私</span></button>
+        <button data-page-link="cross"><i>∞</i><span>跨链</span></button>
+        <button data-page-link="merchant"><i>店</i><span>商户/API</span></button>
+      </nav>
+      <div class="network-pill"><i></i><span><b>X Layer Mainnet</b><small>Chain ID 196 · OKB Gas</small></span></div>
+      <button class="settings-link" data-page-link="settings">⚙ 合约与设置</button>
+    </aside>
+
+    <section class="workspace">
+      <header>
+        <div class="mobile-brand"><img src="./assets/tapeflow-mark.svg" alt="" /><b>TapeFlow X</b></div>
+        <div class="page-title"><b id="page-title">首页</b><small>让价值在 Tape 生态中流动</small></div>
+        <div class="header-actions">
+          <button id="scan-button" class="scan-button" type="button" title="扫一扫"><span aria-hidden="true">⌗</span><b>扫一扫</b></button>
+          <button id="language-button" class="icon-button">EN</button>
+          <button id="wallet-button" class="wallet-button"><i></i><span id="wallet-label">连接钱包</span></button>
+        </div>
+      </header>
+
+      <main>
+        <section class="page active" data-page="home">
+          <div class="hero">
+            <div>
+              <span class="eyebrow">TAPEOUT NATIVE PAYMENT</span>
+              <h1>一个入口，完成每一种链上支付</h1>
+              <p>OKB、任意 X Layer 代币、电路容器、红包、担保、定时、隐私与跨链支付。</p>
+              <div class="hero-actions"><button class="primary" data-go="pay">立即付款</button><button class="ghost" data-go="receive">生成收款码</button><button id="home-scan-button" class="ghost hero-scan-button" type="button"><span aria-hidden="true">⌗</span> 扫一扫</button></div>
+            </div>
+            <div class="circuit-visual" aria-hidden="true"><span></span><i></i><b>TAPE<br>FLOW</b><em>X</em></div>
+          </div>
+
+          <div class="wallet-summary card">
+            <div><span>当前钱包</span><b id="summary-account">尚未连接</b></div>
+            <div><span>网络</span><b>X Layer · 196</b></div>
+            <div><span>OKB余额</span><b id="okb-balance">—</b></div>
+            <button id="refresh-button">刷新</button>
+          </div>
+
+          <div class="commercial-strip">
+            <div><i>福</i><span><b>红包 0.1%</b><small>按实际发出币种收取</small></span></div>
+            <div><i>盾</i><span><b>担保 1%</b><small>未交付退款时一并退回</small></span></div>
+            <div><i>◉</i><span><b>隐私 1%</b><small>隐身付款按同币种收取</small></span></div>
+          </div>
+
+          <div class="quick-grid">
+            <button data-go="pay"><i class="blue">↗</i><b>转账付款</b><small>地址或电路容器直接到账</small></button>
+            <button data-go="receive"><i class="cyan">⌗</i><b>扫码收款</b><small>收款人无需连接钱包</small></button>
+            <button data-go="packet"><i class="red">福</i><b>发红包</b><small>普通、随机、指定、口令</small></button>
+            <button data-go="escrow"><i class="green">盾</i><b>担保付款</b><small>交付后释放，超时可退款</small></button>
+            <button data-go="lock"><i class="gold">锁</i><b>条件锁仓</b><small>时间或价格达标后释放</small></button>
+            <button data-go="veil"><i class="violet">◉</i><b>TapeVeil P3</b><small>X Layer 主网隐私资金池</small></button>
+            <button data-go="cross"><i class="gold">∞</i><b>跨链支付</b><small>支付意图与Solver结算</small></button>
+          </div>
+
+          <div class="tape-strip card">
+            <img src="./assets/tapeflow-mark.svg" alt="" />
+            <div><span>TapeOut 电路规则层</span><b>PaymentGuard · PacketGuard · EscrowState · BudgetGuard</b><small>处理器和电路地址部署后写入设置，支付合约通过统一 Policy 接口调用。</small></div>
+            <span class="status-chip pending" id="circuit-status">等待流片</span>
+          </div>
+        </section>
+
+        <section class="page" data-page="pay">
+          <div class="heading"><div><span>TAPEPAY</span><h1>付款</h1><p>输入钱包或电路容器地址即可到账，收款人不需要在线。</p></div><em>X Layer</em></div>
+          <div class="two-column">
+            <form id="pay-form" class="card form-card">
+              <div class="form-head"><div class="round-icon blue">↗</div><div><b>发起付款</b><small>钱包最后确认才会发送</small></div></div>
+              <label><span>付款币种</span><div class="token-row"><select id="pay-token" data-token-select></select><button type="button" data-add-token>＋ 自定义代币</button></div></label>
+              <label><span>接收地址或容器地址</span><input id="pay-recipient" required placeholder="0x..." autocomplete="off" /><small>支持普通钱包、合约钱包与 TapeOut 容器地址</small></label>
+              <label><span>金额</span><input id="pay-amount" required inputmode="decimal" placeholder="0.00" /></label>
+              <label><span>订单号或备注</span><input id="pay-memo" maxlength="80" placeholder="选填，例如 ORDER-2026-001" /></label>
+              <label class="switch-row"><input id="pay-use-hub" type="checkbox" checked /><span><b>使用 TapeFlow 支付中心</b><small>记录标准付款事件并支持电路策略</small></span></label>
+              <button class="primary wide" type="submit">确认付款</button>
+              <p id="pay-status" class="message"></p>
+            </form>
+            <div class="card info-card">
+              <span class="info-kicker">收款人零操作</span><h2>输入地址，就能收到</h2>
+              <div class="process"><div><i>1</i><span><b>选择币种</b><small>OKB或自定义ERC-20</small></span></div><div><i>2</i><span><b>输入地址</b><small>钱包或电路容器</small></span></div><div><i>3</i><span><b>钱包确认</b><small>链上直接到账</small></span></div></div>
+              <div class="notice">自定义代币会读取链上名称、符号和精度。非标准、带税或黑名单代币可能无法精确到账。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page="receive">
+          <div class="heading"><div><span>RECEIVE</span><h1>收款码</h1><p>生成可分享链接和二维码，付款人打开后自动填好网络、币种和金额。</p></div><em>无需收款人在线</em></div>
+          <div class="two-column">
+            <form id="receive-form" class="card form-card">
+              <label><span>收款地址或容器地址</span><div class="input-action"><input id="receive-recipient" required placeholder="0x..." /><button id="use-my-address" type="button">使用我的钱包</button></div></label>
+              <label><span>收款币种</span><div class="token-row"><select id="receive-token" data-token-select></select><button type="button" data-add-token>＋ 添加</button></div></label>
+              <label><span>金额</span><input id="receive-amount" required inputmode="decimal" placeholder="0.00" /></label>
+              <label><span>订单号/备注</span><input id="receive-memo" maxlength="80" placeholder="选填" /></label>
+              <button class="primary wide" type="submit">生成收款码</button>
+              <p id="receive-status" class="message"></p>
+            </form>
+            <div id="receive-output" class="card qr-card empty"><div class="qr-placeholder">⌗</div><h2>等待生成</h2><p>二维码只包含付款请求，不会自动扣款。</p></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="packet">
+          <div class="packet-banner"><div><span>FAST · SIMPLE · COMMERCIAL</span><h1>红包</h1><p>三步完成：选红包 → 填金额 → 钱包确认。</p></div><div class="red-envelope">福</div></div>
+          <div class="packet-types">
+            <button class="active" data-packet-kind="equal"><i>普</i><b>普通红包</b><small>每人金额相同</small></button>
+            <button data-packet-kind="lucky"><i>拼</i><b>随机红包</b><small>链上可验证随机</small></button>
+            <button data-packet-kind="directed"><i>定</i><b>指定红包</b><small>只有指定地址可领</small></button>
+            <button data-packet-kind="password"><i>令</i><b>口令红包</b><small>承诺后再揭示领取</small></button>
+          </div>
+          <div class="two-column">
+            <form id="packet-form" class="card form-card">
+              <div class="form-head"><div class="round-icon red">福</div><div><b id="packet-form-title">创建普通红包</b><small>未领取余额到期可退回</small></div></div>
+              <label><span>红包币种</span><div class="token-row"><select id="packet-token" data-token-select></select><button type="button" data-add-token>＋ 添加</button></div></label>
+              <label><span id="packet-amount-label">每份金额</span><input id="packet-amount" required inputmode="decimal" value="0.01" /></label>
+              <label id="packet-count-row"><span>红包份数</span><input id="packet-count" type="number" min="1" max="500" value="5" /></label>
+              <label id="packet-recipient-row" class="hidden"><span>指定领取地址</span><input id="packet-recipient" placeholder="0x..." /></label>
+              <label id="packet-password-row" class="hidden"><span>领取口令</span><div class="input-action"><input id="packet-password" type="password" minlength="10" autocomplete="new-password" placeholder="建议10位以上" /><button id="packet-password-toggle" type="button">显示</button></div></label>
+              <div class="form-split"><label><span>有效时间</span><select id="packet-duration"><option value="3600">1小时</option><option value="86400" selected>24小时</option><option value="604800">7天</option></select></label><label><span>祝福语</span><input id="packet-message" maxlength="60" value="让价值在 Tape 生态中流动" /></label></div>
+              <div class="fee-breakdown"><div><span>红包总额</span><b id="packet-total">0.05 OKB</b></div><div><span>服务费 · 0.1%</span><b id="packet-fee">0.00005 OKB</b></div><div class="grand"><span>钱包合计支付</span><b id="packet-pay-total">0.05005 OKB</b></div></div>
+              <button class="packet-primary wide" type="submit">创建并分享</button>
+              <p id="packet-status" class="message"></p>
+            </form>
+            <div class="card claim-card">
+              <div class="claim-head"><span>领取红包</span><small id="claim-mode-hint">打开链接时会自动加载</small></div>
+              <div id="packet-id-row" class="input-action"><input id="packet-id" autocomplete="off" spellcheck="false" placeholder="输入红包码" /><button id="load-packet" type="button">查询</button></div>
+              <label id="claim-password-row" class="hidden"><span>领取口令</span><div class="input-action"><input id="claim-password" type="password" autocomplete="off" placeholder="输入口令" /><button id="claim-password-toggle" type="button">显示</button></div></label>
+              <div id="packet-detail" class="packet-detail empty"><div class="mini-envelope">福</div><b>等待红包</b><small>输入红包码或打开分享链接</small></div>
+              <div id="gasless-claim-box" class="gasless-box hidden">
+                <div class="gasless-head"><span><b>免连接领取</b><small>登录后输入钱包或已开通的容器，Gas由服务方承担</small></span><span class="status-chip">已保护</span></div>
+                <label><span>到账地址</span><input id="claim-destination" autocomplete="off" placeholder="0x… 或 1.2.247" /><small>容器名称会通过 TapeKit 多节点核验；未开通的容器不会放行</small></label>
+                <div class="gasless-login"><span id="claim-login-state">尚未登录</span><button id="claim-login" class="text-button" type="button">登录</button><button id="claim-logout" class="text-button hidden" type="button">退出登录</button></div>
+                <button id="claim-packet-gasless" class="secondary wide" type="button">登录并免Gas领取</button>
+              </div>
+              <div class="stack-actions"><button id="claim-packet" class="packet-primary hidden" type="button">立即领取</button><button id="reveal-packet" class="secondary hidden" type="button">完成激活红包</button><button id="refund-packet" class="text-button hidden" type="button">退回未领取余额</button></div>
+              <p id="claim-status" class="message"></p>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page="escrow">
+          <div class="heading"><div><span>ESCROW · TAPESEND</span><h1>担保付款</h1><p>资金由合约托管，订单沟通与证据通过 TapeSend 端到端加密传递。</p></div><em>三方可验证</em></div>
+          <div class="escrow-trust card">
+            <div><i>1</i><span><b>买方锁定资金</b><small>没有指定仲裁者时，默认由 TapeFlow 仲裁</small></span></div>
+            <div><i>2</i><span><b>双方加密沟通</b><small>争议前仅买卖双方收到消息</small></span></div>
+            <div><i>3</i><span><b>争议后仲裁</b><small>仲裁者此时进入案件并收到证据</small></span></div>
+          </div>
+          <div class="card inbox-onboarding">
+            <div class="inbox-onboarding-copy"><span class="info-kicker">WALLET ENCRYPTED INBOX</span><h2>钱包加密信箱</h2><p>没有电路也能发送加密订单消息。首次签名后，本标签页 30 分钟内刷新可自动恢复；密钥不会上传服务器。</p></div>
+            <div class="inbox-onboarding-action"><span id="escrow-inbox-state" class="status-chip pending">尚未检查</span><button id="escrow-inbox-enable" class="secondary" type="button">开通 / 解锁信箱</button><button id="escrow-inbox-lock" class="secondary hidden" type="button">立即锁定</button><small>关闭标签页、切换钱包、超过 30 分钟或立即锁定后，需要重新签名。</small></div>
+            <p id="escrow-inbox-status" class="message"></p>
+          </div>
+          <div class="two-column escrow-create-grid">
+            <form id="escrow-form" class="card form-card">
+              <span class="info-kicker">创建担保</span><h2>付款并建立订单</h2>
+              <label><span>付款币种</span><select id="escrow-token" data-token-select></select></label>
+              <label><span>卖方收款钱包</span><input id="escrow-payee" required placeholder="0x..." /></label>
+              <label><span>金额</span><input id="escrow-amount" required inputmode="decimal" /></label>
+              <label><span>自愿仲裁奖励</span><input id="escrow-arbiter-reward" inputmode="decimal" value="0" /><small>选填，发生争议并完成裁决时支付给实际仲裁者；无争议自动退回买方</small></label>
+              <details class="optional-channel"><summary>可选：同时发送原生 TapeSend 副本</summary>
+                <label><span>我的 TapeSend 发件电路</span><input id="escrow-payer-endpoint" placeholder="例如 #3057@0.3057" /><small>留空不影响钱包加密信箱</small></label>
+                <label><span>卖方 TapeSend 收件端点</span><input id="escrow-payee-endpoint" placeholder="电路名、容器或32字节端点" /></label>
+              </details>
+              <label><span>指定仲裁者钱包</span><input id="escrow-arbiter" placeholder="选填；留空默认 TapeFlow" /><small id="escrow-default-arbiter">读取默认仲裁地址…</small></label>
+              <label id="escrow-arbiter-endpoint-row" class="hidden"><span>指定仲裁者 TapeSend 端点</span><input id="escrow-arbiter-endpoint" placeholder="电路名、容器或32字节端点" /></label>
+              <label><span>交付期限</span><input id="escrow-deadline" type="datetime-local" required /></label>
+              <label><span>买方验收时间</span><select id="escrow-review-period"><option value="86400">24小时</option><option value="259200" selected>3天</option><option value="604800">7天</option><option value="1209600">14天</option></select><small>卖方标记交付后开始；到期未争议可自动放款</small></label>
+              <label><span>订单说明</span><input id="escrow-memo" maxlength="80" /></label>
+              <div class="fee-breakdown"><div><span>担保本金</span><b id="escrow-principal">0 OKB</b></div><div><span>服务费 · 1%</span><b id="escrow-fee">0 OKB</b></div><div><span>仲裁奖励</span><b id="escrow-reward-total">0 OKB</b></div><div class="grand"><span>钱包合计锁定</span><b id="escrow-pay-total">0 OKB</b></div></div>
+              <button class="primary wide" type="submit">创建担保订单</button><p id="escrow-status" class="message"></p>
+            </form>
+            <div class="card manage-card escrow-orders-card">
+              <span class="info-kicker">我的订单</span><h2>我的担保订单</h2>
+              <p class="card-copy">买方和卖方随时查看订单状态；仲裁者只会看到已经进入争议的案件。</p>
+              <button id="load-my-escrows" class="escrow-load-button wide" type="button">刷新并显示我的订单</button>
+              <div id="my-escrow-list" class="escrow-list empty"><small>连接钱包后读取</small></div>
+              <details class="escrow-id-box">
+                <summary>找不到订单？输入订单码查询</summary>
+                <div class="input-action"><input id="escrow-id" placeholder="TFX-年月日-时间-随机码" autocapitalize="characters" spellcheck="false" /><button id="load-escrow" type="button">查询</button></div>
+              </details>
+            </div>
+          </div>
+
+          <div id="escrow-workspace" class="escrow-workspace hidden">
+            <div class="card escrow-overview">
+              <div class="escrow-overview-head"><div><span class="info-kicker">订单进度</span><h2 id="escrow-title">担保订单</h2></div><em id="escrow-role">访客</em></div>
+              <div id="escrow-detail" class="record-empty">暂无订单</div>
+              <div id="escrow-progress" class="escrow-progress"></div>
+              <div id="escrow-next-action" class="escrow-next-action"></div>
+              <div class="manage-actions escrow-manage-actions"><button id="escrow-delivered" class="escrow-main-action" type="button">确认已经交付</button><button id="escrow-release" class="escrow-main-action" type="button">验收完成，确认放款</button><button id="escrow-finalize" class="escrow-secondary-action" type="button">验收期已到，执行放款</button><button id="escrow-dispute" class="escrow-danger-action" type="button">交付有问题，发起争议</button><button id="escrow-refund" class="escrow-secondary-action" type="button">交付逾期，退回资金</button></div>
+              <p id="escrow-manage-status" class="message"></p>
+            </div>
+
+            <div class="escrow-collaboration">
+              <form id="escrow-message-form" class="card form-card">
+                <span class="info-kicker">TAPEFLOW × TAPESEND</span><h2>订单消息与证据</h2>
+                <div class="privacy-warning"><b>加密可见范围</b><span id="escrow-message-audience">争议前仅买卖双方；发起争议后仲裁者加入。</span></div>
+                <button id="escrow-grant-arbiter" class="secondary wide hidden" type="button">授权仲裁者读取完整历史</button>
+                <details class="optional-channel"><summary>可选：发送原生 TapeSend 副本</summary><label><span>我的 TapeSend 发件电路</span><input id="escrow-message-sender" placeholder="留空则只使用钱包加密信箱" /></label></details>
+                <label><span>消息类型</span><select id="escrow-message-kind"><option value="0">订单沟通</option><option value="1">证据说明</option><option value="2">交付证明</option></select></label>
+                <label><span>消息内容</span><textarea id="escrow-message-body" required rows="5" maxlength="3000" placeholder="交付说明、争议陈述或证据链接；不要填写私钥和密码"></textarea></label>
+                <label><span>证据文件或链接说明</span><input id="escrow-evidence-note" maxlength="500" placeholder="选填：文件名、哈希、云盘链接或物流单号" /></label>
+                <button class="primary wide" type="submit">加密发送</button>
+                <p id="escrow-message-status" class="message"></p>
+              </form>
+              <div id="escrow-log-card" class="card escrow-log-card">
+                <span class="info-kicker">ENCRYPTED CASE HISTORY</span><h2>可验证沟通记录</h2>
+                <p class="card-copy">链上只保存认证密文。买卖双方可解密全部历史；争议发生后，发起方把订单密钥加密授权给仲裁者。</p>
+                <div id="escrow-message-log" class="escrow-log empty"><small>暂无已登记消息</small></div>
+              </div>
+            </div>
+
+            <div id="escrow-fallback-panel" class="card fallback-panel hidden">
+              <div class="fallback-copy">
+                <div class="fallback-title-row"><span class="fallback-icon" aria-hidden="true">仲</span><div><span class="info-kicker">备用仲裁通道</span><h2>共同改由 TapeFlow 仲裁</h2></div></div>
+                <p>买方与卖方必须分别连接自己的钱包确认。两边都同意后，仲裁权才会切换。</p>
+                <div class="fallback-note"><b>切换规则</b><span>两次独立钱包确认，缺一不可。切换后，当前指定仲裁者将不再负责本案。</span></div>
+              </div>
+              <div class="fallback-actions">
+                <div id="escrow-fallback-state" class="fallback-state" aria-label="双方确认状态"></div>
+                <button id="escrow-fallback-approve" class="fallback-approve" type="button">我同意改由 TapeFlow 仲裁</button>
+                <small class="fallback-safety">仅在指定仲裁者无法继续处理时使用</small>
+              </div>
+              <p id="escrow-fallback-status" class="message"></p>
+            </div>
+
+            <form id="escrow-arbitration-form" class="card arbitration-panel hidden">
+              <div class="arbitration-head"><div><span class="info-kicker">仲裁者工作台</span><h2>裁决争议订单</h2></div><em>仅当前仲裁钱包可提交</em></div>
+              <p class="card-copy">请先在 TapeSend 阅读双方的加密陈述和证据，再决定资金分配。裁决提交后立即结算，不能撤回。</p>
+              <button id="escrow-intervene" class="secondary wide hidden" type="button">争议已满15天 · TapeFlow接入仲裁</button>
+              <div class="form-split"><label><span>退还买方</span><input id="escrow-payer-award" required inputmode="decimal" /></label><label><span>支付卖方</span><input id="escrow-payee-award" required inputmode="decimal" /></label></div>
+              <label><span>裁决理由</span><textarea id="escrow-resolution-reason" required rows="4" maxlength="2000" placeholder="说明事实、证据和分配理由"></textarea></label>
+              <button id="escrow-resolve-button" class="primary wide" type="submit">核对并提交裁决</button>
+              <p id="escrow-arbitration-status" class="message"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="page" data-page="schedule">
+          <div class="heading"><div><span>SCHEDULE</span><h1>延迟与定时付款</h1><p>工资、订阅、分期和延迟到账的基础模块。</p></div><em>时间锁</em></div>
+          <div class="two-column">
+            <form id="schedule-form" class="card form-card">
+              <label><span>付款币种</span><select id="schedule-token" data-token-select></select></label>
+              <label><span>收款地址</span><input id="schedule-payee" required placeholder="0x..." /></label>
+              <label><span>金额</span><input id="schedule-amount" required inputmode="decimal" /></label>
+              <label><span>到账时间</span><input id="schedule-time" required type="datetime-local" /></label>
+              <label class="switch-row"><input id="schedule-cancelable" type="checkbox" checked /><span><b>到账前允许取消</b><small>关闭后资金只能等待到期领取</small></span></label>
+              <label><span>备注</span><input id="schedule-memo" maxlength="80" /></label>
+              <button class="primary wide" type="submit">创建定时付款</button><p id="schedule-status" class="message"></p>
+            </form>
+            <div class="card manage-card"><span class="info-kicker">定时任务</span><h2>领取或取消</h2><div class="input-action"><input id="schedule-id" placeholder="任务编号" inputmode="numeric" /><button id="load-schedule" type="button">查询</button></div><div id="schedule-detail" class="record-empty">暂无任务</div><div class="manage-actions two"><button id="schedule-claim" type="button">到期领取</button><button id="schedule-cancel" type="button">取消并退款</button></div><p id="schedule-manage-status" class="message"></p></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="lock">
+          <div class="heading"><div><span>TAPELOCK</span><h1>条件锁仓</h1><p>给自己锁仓，或把一份带释放条件的资产赠送给别人。</p></div><em>不可撤回 · 受益人固定</em></div>
+          <div class="lock-mode" role="tablist" aria-label="锁仓类型">
+            <button class="active" type="button" data-lock-kind="self"><i>己</i><span><b>给自己锁仓</b><small>到期前不能操作</small></span></button>
+            <button type="button" data-lock-kind="gift"><i>礼</i><span><b>赠送锁仓</b><small>到期直接给对方</small></span></button>
+          </div>
+          <div class="two-column lock-layout">
+            <form id="lock-form" class="card form-card">
+              <div class="form-head"><div class="round-icon gold">锁</div><div><b id="lock-form-title">创建自己的锁仓</b><small>创建后不能修改、取消或提前取出</small></div></div>
+              <label><span>锁仓币种</span><div class="token-row"><select id="lock-token" data-token-select></select><button type="button" data-add-token>＋ 添加</button></div></label>
+              <label><span>锁仓数量</span><input id="lock-amount" required inputmode="decimal" placeholder="0.00" /></label>
+              <label id="lock-beneficiary-row" class="hidden"><span>被赠送人钱包或容器地址</span><input id="lock-beneficiary" placeholder="0x..." /><small>资产只能释放到这个地址，创建后不能更改</small></label>
+              <label><span>什么时候可以解锁</span><select id="lock-condition"><option value="0">到达指定时间</option><option value="1">价格达到目标</option><option value="2">时间和价格都满足</option><option value="3">时间或价格满足一个</option></select></label>
+              <label id="lock-time-row"><span>最早解锁时间</span><input id="lock-time" type="datetime-local" required /></label>
+              <div id="lock-price-fields" class="lock-price-fields hidden">
+                <div class="oracle-state"><span><b>价格来源</b><small id="lock-oracle-label">等待配置已核验价格源</small></span><em id="lock-oracle-state">未配置</em></div>
+                <div class="form-split">
+                  <label><span>价格条件</span><select id="lock-direction"><option value="0">价格达到或高于</option><option value="1">价格达到或低于</option></select></label>
+                  <label><span>目标价格（USD）</span><input id="lock-target-price" inputmode="decimal" placeholder="例如 1.25" /></label>
+                </div>
+                <div class="form-split">
+                  <label><span>二次确认间隔</span><select id="lock-confirmation"><option value="1800">30分钟</option><option value="3600" selected>1小时</option><option value="14400">4小时</option><option value="86400">24小时</option></select></label>
+                  <label><span>最晚强制解锁</span><input id="lock-fallback" type="datetime-local" /></label>
+                </div>
+                <div class="notice">价格条件需要两次有效报价确认；没有已核验价格源的代币，只能使用时间锁。</div>
+              </div>
+              <label><span>备注</span><input id="lock-memo" maxlength="80" placeholder="选填，例如 团队激励 / 生日礼物" /></label>
+              <div class="lock-safety"><i>✓</i><span><b>受益人随时可查</b><small>查询不需要连接钱包；到期后任何人可触发，资产只会进入受益地址。</small></span></div>
+              <button class="gold-button wide" type="submit">核对并创建锁仓</button>
+              <p id="lock-status" class="message"></p>
+            </form>
+
+            <div class="card lock-lookup">
+              <span class="info-kicker">MY TAPELOCK</span><h2>查询收到的锁仓</h2><p>输入钱包或容器地址即可查询，不需要连接或签名。</p>
+              <label><span>受益地址</span><div class="input-action"><input id="lock-query-address" placeholder="0x..." /><button id="lock-use-my-address" type="button">我的地址</button></div></label>
+              <button id="load-beneficiary-locks" class="ghost wide" type="button">查询锁仓资产</button>
+              <div id="lock-list" class="lock-list empty"><div class="lock-empty-icon">锁</div><b>等待查询</b><small>最多显示最近20笔锁仓</small></div>
+              <div class="lock-id-box">
+                <label><span>按锁仓编号查询</span><div class="input-action"><input id="lock-id" inputmode="numeric" placeholder="锁仓编号" /><button id="load-lock" type="button">查询</button></div></label>
+                <div id="lock-detail" class="record-empty">暂无锁仓记录</div>
+                <div class="manage-actions two"><button id="lock-check-price" class="hidden" type="button">检查价格条件</button><button id="lock-claim" class="hidden" type="button">释放到受益地址</button></div>
+                <p id="lock-manage-status" class="message"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page="veil">
+          <div class="heading"><div><span>TAPEVEIL · P3 MAINNET</span><h1>隐私资金池</h1><p>隐藏存款钱包与退出收款地址之间的路径；恢复材料只在本机生成和解密。</p></div><em class="mainnet-live">X Layer 主网运行中</em></div>
+          <div class="veil-panel active">
+            <div class="privacy-launch-grid">
+              <div><span>存款额度</span><b>合约不设单笔上限</b><small>最低 0.0005 OKB</small></div>
+              <div><span>主网服务</span><b>公众存款已开放</b><small>存款前自动核验服务状态</small></div>
+              <div><span>服务费</span><b>存入金额的 1%</b><small>按 OKB 从存款中收取</small></div>
+            </div>
+            <div class="privacy-warning"><b>P3 资金池模式</b><span>通过 ZK 证明退出，收款人看到的是资金池/Relayer，而不是原存款钱包。协议不设置单笔存款上限；普通退出仍会公开收款地址与退出金额。当前版本未经独立审计，请自行评估存款规模。</span></div>
+            <div class="two-column">
+              <form id="shielded-deposit-form" class="card form-card">
+                <div class="form-head"><div class="round-icon violet">ZK</div><div><b>存入隐私池</b><small>本机生成承诺，钱包仅提交承诺值</small></div></div>
+                <label><span>资产</span><input value="OKB · X Layer 原生币" disabled /></label>
+                <label><span>存入金额</span><input id="shielded-amount" required inputmode="decimal" min="0.0005" step="any" placeholder="最低 0.0005 · 无单笔上限" /><small>合约不设存款上限；实际交易受钱包余额与 X Layer Gas 限制。</small></label>
+                <label><span>恢复文件密码</span><input id="shielded-backup-password" type="password" minlength="12" autocomplete="new-password" required placeholder="至少12位；TapeFlow不会保存" /></label>
+                <label><span>再次输入密码</span><input id="shielded-backup-password-confirm" type="password" minlength="12" autocomplete="new-password" required /></label>
+                <label class="switch-row"><input id="shielded-backup-confirm" type="checkbox" required /><span><b>先下载加密恢复文件，再打开钱包</b><small>文件或密码丢失都可能永久失去资金</small></span></label>
+                <button id="shielded-deposit-submit" class="violet-button wide" type="submit" disabled>主网门槛核验中</button>
+                <p id="shielded-deposit-status" class="message"></p>
+              </form>
+              <form id="shielded-withdraw-form" class="card form-card">
+                <div class="form-head"><div class="round-icon violet">↘</div><div><b>私密转出</b><small>本地生成证明，Relayer提交</small></div></div>
+                <label><span>收款钱包或容器</span><input id="shielded-recipient" placeholder="0x..." /></label>
+                <label><span>恢复文件</span><input id="shielded-note-file" type="file" accept="application/json,.json" required /></label>
+                <label><span>恢复文件密码</span><input id="shielded-note-password" type="password" minlength="12" autocomplete="current-password" required /></label>
+                <button id="shielded-balance-load" class="ghost wide" type="button" disabled>读取可用余额</button>
+                <div id="shielded-balance-card" class="privacy-balance hidden">
+                  <div><span>当前可用余额</span><strong id="shielded-available-balance">—</strong></div>
+                  <div><span>本次最多可转</span><strong id="shielded-max-withdraw">—</strong></div>
+                  <small id="shielded-note-count">—</small>
+                </div>
+                <label><span>转出金额</span><div class="amount-max-row"><input id="shielded-withdraw-amount" inputmode="decimal" placeholder="请先读取余额" disabled /><button id="shielded-use-max" class="ghost" type="button" disabled>全部转出</button></div></label>
+                <button id="shielded-withdraw-submit" class="violet-button wide" type="submit" disabled>获取报价并生成证明</button>
+                <p id="shielded-withdraw-status" class="message"></p>
+              </form>
+            </div>
+            <div class="two-column privacy-ops">
+              <div class="card privacy-stack"><b>P3 主网运行状态</b><div><span>Verifier</span><em id="privacy-verifier-status">核验中</em></div><div><span>资金池 / EntryPoint</span><em id="privacy-pool-status">核验中</em></div><div><span>本地证明器与电路哈希</span><em id="privacy-prover-status">核验中</em></div><div><span>ASP 根发布服务</span><em id="privacy-asp-status">核验中</em></div><div><span>Relayer + Ragequit恢复</span><em id="privacy-relayer-status">核验中</em></div><button id="privacy-health-check" class="ghost wide" type="button">重新核验主网服务</button><p id="privacy-health-status" class="message"></p></div>
+              <form id="shielded-ragequit-form" class="card form-card"><div class="form-head"><div class="round-icon red">!</div><div><b>紧急恢复到原存款钱包</b><small>ASP或Relayer不可用时仍可退出</small></div></div><label><span>恢复文件</span><input id="shielded-ragequit-file" type="file" accept="application/json,.json" required /></label><label><span>恢复文件密码</span><input id="shielded-ragequit-password" type="password" minlength="12" autocomplete="current-password" required /></label><button id="shielded-ragequit-submit" class="red-button wide" type="submit" disabled>生成 Ragequit 证明</button><p class="notice">必须由原存款钱包签名；资金只退回该钱包。任何恢复材料都不会上传服务器。</p><p id="shielded-ragequit-status" class="message"></p></form>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page="receipt">
+          <div class="heading"><div><span>TAPESEND · B2C</span><h1>加密履约消息</h1><p>不是聊天工具：把付款、发货、退款、红包和结算状态发送到用户的 TapeOut 容器收件箱。</p></div><em>商户付 Gas</em></div>
+          <div class="receipt-status card">
+            <div class="receipt-status-mark">信</div>
+            <div><b>X Layer DeWEB Hub 已接入</b><span>消息在 X Layer 发出，可送达 BNB Chain、Base 或 X Layer 的容器端点；正文端到端加密。</span></div>
+            <div class="hub-state"><span>当前实现已核对</span><strong>尚未封印</strong></div>
+          </div>
+          <div class="two-column">
+            <form id="receipt-form" class="card form-card">
+              <div class="form-head"><div class="round-icon cyan">信</div><div><b>发送业务收据</b><small>发件商户钱包确认并支付 OKB Gas</small></div></div>
+              <label><span>商户发件电路</span><input id="receipt-sender" required placeholder="例如 #1@2.344" /><small>必须是当前钱包持有并已开通的 X Layer 电路</small></label>
+              <div class="form-split"><label><span>收件链</span><select id="receipt-recipient-chain"><option value="196">X Layer</option><option value="56">BNB Chain</option><option value="8453">Base</option></select></label><label><span>用户收件端点</span><input id="receipt-recipient" required placeholder="电路名、容器或32字节端点" /></label></div>
+              <label><span>业务类型</span><select id="receipt-template"><option value="payment.confirmed">付款成功</option><option value="packet.ready">红包待领取</option><option value="packet.claimed">红包已领取</option><option value="order.shipped">订单已发货</option><option value="escrow.released">担保已放款</option><option value="refund.completed">退款完成</option><option value="crosschain.settled">跨链已结算</option></select></label>
+              <label><span>业务编号</span><input id="receipt-reference" maxlength="80" placeholder="订单号 / 红包号 / 意图号" /></label>
+              <label><span>消息标题</span><input id="receipt-subject" maxlength="200" value="TapeFlow X 付款成功" /></label>
+              <label><span>加密正文</span><textarea id="receipt-body" rows="5" required placeholder="金额、币种、状态、核验提示；不要写私钥或恢复材料"></textarea></label>
+              <label class="switch-row"><input id="receipt-sealed-only" type="checkbox" checked /><span><b>只允许端到端加密</b><small>收件人没有可用公钥时拒绝发送，不降级成公开消息</small></span></label>
+              <button class="primary wide" type="submit">核验端点并发送</button>
+              <p id="receipt-status" class="message"></p>
+            </form>
+            <div class="card receipt-guide">
+              <span class="info-kicker">B2C DELIVERY RAIL</span><h2>一次付款，持续履约</h2>
+              <div class="process"><div><i>1</i><span><b>交易完成</b><small>TapeFlow记录付款、红包或担保状态</small></span></div><div><i>2</i><span><b>商户容器发消息</b><small>商户钱包确认并承担Gas</small></span></div><div><i>3</i><span><b>用户跨链收件</b><small>客户端读取各链Hub并核验链上摘要</small></span></div></div>
+              <div class="notice">适合订单/售后、会员券、游戏道具、对账回执和跨境物流。消息跨链靠多链读取，不等于资产跨链桥。</div>
+              <a class="external-button" href="https://github.com/TapeOutProtocol/TapeKit/tree/main/send" target="_blank" rel="noreferrer">查看 TapeSend 源码与规范</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" data-page="cross">
+          <div class="heading"><div><span>TAPEFLOW OMNI</span><h1>跨链支付意图</h1><p>用户在源链锁定资产，Solver在目标链向钱包或容器付款。</p></div><em>Adapter-ready</em></div>
+          <div class="two-column">
+            <form id="cross-form" class="card form-card">
+              <label><span>源链资产</span><select id="cross-source-token" data-token-select></select></label>
+              <label><span>源链支付金额</span><input id="cross-source-amount" required inputmode="decimal" /></label>
+              <div class="form-split"><label><span>目标链</span><select id="cross-chain"><option value="56">BNB Chain</option><option value="8453">Base</option><option value="1">Ethereum</option><option value="42161">Arbitrum</option><option value="196">X Layer</option></select></label><label><span>目标币合约</span><input id="cross-destination-token" placeholder="0x0表示原生币" /></label></div>
+              <label><span>目标钱包或容器地址</span><input id="cross-recipient" required placeholder="0x..." /></label>
+              <label><span>最少到账数量</span><input id="cross-min-out" required inputmode="decimal" /></label>
+              <label><span>报价有效期</span><select id="cross-duration"><option value="600">10分钟</option><option value="1800" selected>30分钟</option><option value="3600">1小时</option></select></label>
+              <button class="primary wide" type="submit">创建跨链支付意图</button><p id="cross-status" class="message"></p>
+            </form>
+            <div class="card info-card"><span class="info-kicker">真实资产结算</span><h2>看起来像无桥，资金不会凭空出现</h2><div class="process"><div><i>1</i><span><b>源链锁定</b><small>超时未成交可退款</small></span></div><div><i>2</i><span><b>Solver目标链付款</b><small>钱包或容器直接到账</small></span></div><div><i>3</i><span><b>确认后结算</b><small>源链资金释放给Solver</small></span></div></div><div class="input-action"><input id="cross-intent-id" placeholder="意图编号" /><button id="cross-refund" type="button">超时退款</button></div><p id="cross-manage-status" class="message"></p></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="merchant">
+          <div class="heading"><div><span>MERCHANT & API</span><h1>商户接入</h1><p>支付链接、二维码、回调和AI Agent接口使用同一种支付意图格式。</p></div><em>SDK-ready</em></div>
+          <div class="api-grid">
+            <div class="card api-card"><span>01</span><h2>付款链接</h2><pre><code>TapeFlowX.createPayment({
+  chainId: 196,
+  token: "native",
+  recipient: "0x...",
+  amount: "1.5",
+  orderId: "ORDER-001"
+})</code></pre><button data-go="receive">生成收款码</button></div>
+            <div class="card api-card"><span>02</span><h2>验证到账</h2><pre><code>GET /payments/:reference
+
+{
+  "status": "confirmed",
+  "chainId": 196,
+  "txHash": "0x..."
+}</code></pre><button id="copy-api-example">复制示例</button></div>
+            <div class="card api-card"><span>03</span><h2>AI Agent付款</h2><pre><code>policy: {
+  singleLimit: "0.1",
+  dailyLimit: "1",
+  recipients: ["0x..."]
+}</code></pre><button id="open-budget-guard" type="button">配置BudgetGuard</button></div>
+          </div>
+          <div id="budget-guard" class="card manage-card budget-guard-card">
+            <div class="form-head"><div class="round-icon violet">盾</div><div><b>BudgetGuard 多资产支付保护</b><small>每个钱包、每种代币分别设置；最终放行由 X Layer TapeOut 电路执行</small></div></div>
+            <div class="form-split">
+              <label><span>需要保护的币种</span><div class="token-row"><select id="budget-token" data-token-select></select><button type="button" data-add-token>＋ 自定义代币</button></div></label>
+              <div id="budget-current" class="budget-summary"><small>当前规则</small><b>连接钱包后读取</b><span>未读取链上预算</span></div>
+            </div>
+            <div class="form-split">
+              <label><span>单笔最高金额</span><input id="budget-single" inputmode="decimal" placeholder="0 表示不限额" /><small>超过此金额，付款交易会被电路拒绝</small></label>
+              <label><span>每日最高金额</span><input id="budget-daily" inputmode="decimal" placeholder="0 表示不限额" /><small>按 UTC 自然日累计</small></label>
+            </div>
+            <label class="switch-row"><input id="budget-use-allowlist" type="checkbox" /><span><b>仅允许白名单收款地址</b><small>开启后，没有单独加入的地址都不能收款</small></span></label>
+            <div class="manage-actions"><button id="budget-load" type="button">读取当前规则</button><button id="budget-save" class="primary" type="button">保存限额规则</button></div>
+            <div class="budget-divider"></div>
+            <div class="form-split">
+              <label><span>收款白名单地址</span><input id="budget-recipient" placeholder="0x..." /></label>
+              <label class="switch-row compact-switch"><input id="budget-recipient-allowed" type="checkbox" checked /><span><b>允许该地址</b><small>取消勾选表示从白名单移除</small></span></label>
+            </div>
+            <div class="manage-actions"><button id="budget-save-recipient" type="button">保存白名单地址</button></div>
+            <div class="budget-divider"></div>
+            <label class="switch-row"><input id="budget-frozen" type="checkbox" /><span><b>暂停这个币种的 TapeFlow 付款</b><small>冻结只影响当前钱包和所选币种，解除后恢复</small></span></label>
+            <div class="manage-actions"><button id="budget-save-frozen" type="button" disabled>请先读取当前规则</button></div>
+            <div class="notice">修改限额会从零重新开始当天累计；设为 0 表示不限额。白名单、限额和冻结都不会把资产转入合约。</div>
+            <p id="budget-status" class="message"></p>
+          </div>
+        </section>
+
+        <section class="page" data-page="settings">
+          <div class="heading"><div><span>CONFIGURATION</span><h1>合约与设置</h1><p>默认使用已核验的 X Layer 主网配置；这里仅用于本机测试覆盖。</p></div><em>主网配置</em></div>
+          <form id="settings-form" class="card settings-card">
+            <div class="settings-grid">
+              <label><span>TapeFlowXHubV1</span><input id="setting-hub" placeholder="0x..." /><small>付款、红包、定时、隐身公告</small></label>
+              <label><span>TapeFlowEscrowV2</span><input id="setting-escrow" placeholder="0x..." /><small>默认/指定仲裁、TapeSend证据、争议裁决</small></label>
+              <label><span>TapeFlowPacketHubV4</span><input id="setting-packetV2" placeholder="0x..." /><small>单次创建、自动激活、免 Gas 领取与到期自动退回</small></label>
+              <label><span>BudgetPolicyV1</span><input id="setting-policy" placeholder="0x..." /><small>日限额、单笔限额、收款白名单</small></label>
+              <label><span>TapeOut Circuit Policy V2</span><input id="setting-circuitPolicy" placeholder="0x..." /><small>按钱包与代币隔离限额，由 X Layer 流片电路最终放行</small></label>
+              <label><span>CrossChainIntentV1</span><input id="setting-intent" placeholder="0x..." /><small>源链资金锁定和Solver结算</small></label>
+              <label><span>TapeLockV2</span><input id="setting-lock" placeholder="0x..." /><small>不可撤回的时间与统一价格条件锁仓</small></label>
+              <label><span>TapeFlow Price Oracle</span><input id="setting-priceOracle" placeholder="0x..." /><small>支持多资产、签名报价与防重放</small></label>
+              <label><span>TapeOut X Layer Project</span><input id="setting-processor" placeholder="流片后填写" /><small>TapeFlow X 电路所在项目地址</small></label>
+              <label><span>PaymentGuard Circuit</span><input id="setting-circuit" placeholder="流片后填写" /><small>支付规则电路编号或地址</small></label>
+              <label><span>ZK Privacy EntryPoint</span><input id="setting-privacy" placeholder="0x..." /><small>0xbow Entrypoint / 官方兼容实现</small></label>
+              <label><span>ZK Privacy Pool</span><input id="setting-privacyPool" placeholder="0x..." /><small>对应资产的资金池地址</small></label>
+              <label><span>红包登录领取服务</span><input id="setting-claimRelayer" placeholder="https://..." /><small>OIDC校验、授权签名与Gas代付</small></label>
+              <label><span>登录服务 Issuer</span><input id="setting-oidcIssuer" placeholder="https://login.example.com/" /><small>OpenID Connect Issuer；必须使用 HTTPS</small></label>
+              <label><span>登录应用 Client ID</span><input id="setting-oidcClientId" placeholder="tapeflow-web" /><small>公开的浏览器应用标识，不是密钥</small></label>
+              <label><span>登录 API Audience</span><input id="setting-oidcAudience" placeholder="tapeflow-x" /><small>必须与 Relayer 校验值一致</small></label>
+              <label><span>隐私 Relayer</span><input id="setting-privacyRelayer" placeholder="https://..." /><small>只接收证明与公开输入，不接触秘密</small></label>
+              <label><span>隐私 ASP 服务</span><input id="setting-privacyAsp" placeholder="https://..." /><small>发布合规关联集根与标签证明；不接触恢复材料</small></label>
+            </div>
+            <div class="settings-actions"><button class="primary" type="submit">保存本机覆盖</button><button id="reset-settings" class="ghost" type="button">恢复主网配置</button></div><p id="settings-status" class="message"></p>
+          </form>
+          <div class="card oracle-admin-card">
+            <div class="oracle-admin-head">
+              <div class="round-icon gold">价</div>
+              <div><span class="info-kicker">PRICE PUBLISHER</span><h2>价格源运营</h2><p>OKB/USD 采用 OKX 与 Gate 双来源报价；发布器只负责签名报价，不能转移用户资产。</p></div>
+              <em id="oracle-publisher-badge">读取中</em>
+            </div>
+            <div class="oracle-admin-grid">
+              <div><small>服务器价格签名者</small><b id="oracle-publisher-signer">—</b></div>
+              <div><small>链上授权</small><b id="oracle-publisher-auth">读取中</b></div>
+              <div><small>最新 OKB/USD</small><b id="oracle-publisher-price">等待首次发布</b></div>
+              <div><small>当前钱包权限</small><b id="oracle-publisher-role">尚未连接</b></div>
+            </div>
+            <button id="oracle-authorize-signer" class="gold-button wide" type="button" disabled>连接管理员钱包授权</button>
+            <p id="oracle-publisher-status" class="message">正在读取 X Layer 价格注册表…</p>
+          </div>
+          <div class="card deployment-note"><b>当前阶段</b><p>核心支付、跨链意图、TapeOut 多资产预算策略 V2、担保、四类红包、价格注册表、条件锁仓与 P3 隐私资金池均已部署到 X Layer 主网。P3 已开放公众存款，协议不设置单笔存款上限，并已完成存入、普通隐私转出与 Ragequit 紧急恢复闭环验证。恢复文件与密码必须分开离线保存；当前版本未经独立审计，使用者应自行评估资金风险。</p></div>
+        </section>
+      </main>
+
+      <footer class="site-footer" aria-label="TapeFlow 联系方式">
+        <div>
+          <img src="./assets/tapeflow-mark.svg" alt="" />
+          <span><b>TapeFlow X</b><small>X Layer Mainnet · Chain ID 196</small></span>
+        </div>
+        <div class="footer-links">
+          <a href="https://t.me/Naani_Developer" target="_blank" rel="noopener noreferrer">Telegram 联系开发者</a>
+          <div class="sponsor-wallet"><span>赞助开发者</span><code id="developer-wallet">0x382e86e61b8c3ad6c32b8eefdf81c5e9819703e6</code><button id="copy-developer-wallet" type="button">复制地址</button></div>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <nav class="bottom-nav"><button class="active" data-page-link="home"><i>⌂</i><span>首页</span></button><button data-page-link="pay"><i>↗</i><span>付款</span></button><button data-page-link="packet"><i>福</i><span>红包</span></button><button data-page-link="lock"><i>锁</i><span>锁仓</span></button><button data-page-link="veil"><i>◉</i><span>隐私</span></button></nav>
+
+  <dialog id="confirm-dialog"><form method="dialog" class="dialog-card"><button class="dialog-close" value="cancel">×</button><span class="dialog-kicker">请核对</span><h2 id="confirm-title">确认付款</h2><div id="confirm-details" class="confirm-details"></div><label class="confirm-check"><input id="confirm-checkbox" type="checkbox" /><span>我已核对网络、币种、金额与完整地址</span></label><button id="confirm-action" class="primary wide" type="button" disabled>打开钱包确认</button><p id="confirm-status" class="message"></p></form></dialog>
+
+  <dialog id="escrow-dispute-dialog"><form id="escrow-dispute-form" class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="escrow-dispute-dialog">×</button><span class="dialog-kicker">发起争议</span><h2>填写争议原因</h2><p class="dispute-dialog-note">请简单说明交付哪里有问题。提交后，仲裁者会看到此原因和已有沟通记录。</p><label><span>争议原因（必填）</span><textarea id="escrow-dispute-reason" required rows="4" maxlength="3000" placeholder="例如：收到的内容与约定不符，申请退款。"></textarea></label><label><span>证据说明（选填）</span><input id="escrow-dispute-evidence" maxlength="500" placeholder="例如：文件名、订单号或证据链接" /></label><button class="red-button wide dispute-submit" type="submit">下一步：核对并发起争议</button><p id="escrow-dispute-status" class="message"></p></form></dialog>
+
+  <dialog id="token-dialog"><form id="token-form" class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="token-dialog">×</button><span class="dialog-kicker">CUSTOM TOKEN</span><h2>添加X Layer代币</h2><label><span>代币合约地址</span><input id="token-address" required placeholder="0x..." /></label><button class="primary wide" type="submit">读取并添加</button><p id="token-status" class="message"></p></form></dialog>
+
+  <dialog id="scan-dialog"><div class="dialog-card"><button class="dialog-close" type="button" data-close-dialog="scan-dialog">×</button><span class="dialog-kicker">TAPEFLOW SCAN</span><h2>扫一扫</h2><p class="scan-help">扫描 TapeFlow 付款码、红包码或锁仓码，自动打开对应功能。</p><video id="scan-video" playsinline muted></video><div class="scan-actions"><button id="camera-scan" class="primary" type="button">打开摄像头</button><label class="upload-button">选择二维码图片<input id="scan-file" type="file" accept="image/*" /></label></div><textarea id="scan-text" rows="3" placeholder="也可以粘贴 TapeFlow 链接"></textarea><button id="parse-scan" class="ghost wide" type="button">打开对应功能</button><p id="scan-status" class="message"></p></div></dialog>
+
+  <dialog id="wallet-dialog"><div class="dialog-card wallet-connect-card"><button class="dialog-close" type="button" data-close-dialog="wallet-dialog">×</button><span class="dialog-kicker">CONNECT WALLET</span><h2>连接 X Layer 钱包</h2><p>手机可一键呼出 OKX Wallet；电脑可用钱包扫描二维码，在钱包内打开当前 TapeFlow 地址。</p><div id="wallet-connect-qr" class="wallet-connect-qr"></div><button id="open-okx-wallet" class="primary wide" type="button">在 OKX Wallet 中打开</button><button id="copy-dapp-url" class="ghost wide" type="button">复制当前网站地址</button><small>连接只读取公开地址；付款、授权和签名仍需你在钱包中逐次确认。</small><p id="wallet-connect-status" class="message"></p></div></dialog>
+
+  <dialog id="wallet-account-dialog"><div class="dialog-card wallet-account-card"><button class="dialog-close" type="button" data-close-dialog="wallet-account-dialog">×</button><span class="dialog-kicker">CONNECTED WALLET</span><h2>已连接的钱包</h2><div class="connected-wallet-address"><span>当前地址</span><code id="wallet-account-address"></code></div><button id="copy-wallet-address" class="ghost wide" type="button">复制钱包地址</button><button id="disconnect-wallet" class="wallet-disconnect wide" type="button">断开钱包连接</button><small>只断开 TapeFlow 当前会话，不会删除浏览器钱包中的账户或资产。</small></div></dialog>
+
+  <div id="toast" class="toast"></div>
+  <script src="./vendor/ethers.umd.min.js"></script>
+  <script src="./vendor/qrcode-generator.min.js"></script>
+  <script src="./vendor/tapeflow-tapesend.js"></script>
+  <script src="./vendor/tapeflow-case-crypto.js"></script>
+  <script src="./vendor/tapeflow-privacy-sdk.js?release=2.8.0"></script>
+  <script src="./config.js?release=2.8.0"></script>
+  <script src="./app.js?release=2.8.0"></script>
+</body>
+</html>

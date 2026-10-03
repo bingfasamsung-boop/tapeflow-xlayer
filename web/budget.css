@@ -1,0 +1,10 @@
+.budget-guard-card { margin-top: 18px; }
+.budget-summary { border: 1px solid var(--line); border-radius: 13px; background: #f7f9fc; padding: 14px; min-height: 84px; }
+.budget-summary small, .budget-summary b, .budget-summary span { display: block; }
+.budget-summary small, .budget-summary span { color: var(--muted); }
+.budget-summary b { margin: 6px 0; }
+.budget-divider { height: 1px; background: var(--line); margin: 20px 0; }
+.compact-switch { margin-top: 21px; min-height: 48px; }
+.budget-guard-card .manage-actions .primary { border: 0; background: var(--blue); color: #fff; }
+.budget-guard-card .manage-actions .red-button { border: 0; background: var(--red); color: #fff; }
+@media (max-width: 560px) { .compact-switch { margin-top: 0; } }

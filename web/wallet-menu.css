@@ -1,0 +1,11 @@
+.wallet-button.connected{position:relative;padding-right:30px}
+.wallet-button.connected::after{content:"⌄";position:absolute;right:12px;top:50%;transform:translateY(-55%);font-size:13px;color:#bcd4f7}
+.wallet-account-card{display:grid;gap:12px}
+.wallet-account-card h2{margin-bottom:6px}
+.connected-wallet-address{padding:15px;border-radius:13px;background:#f5f8fc;border:1px solid #dce6f3}
+.connected-wallet-address span,.connected-wallet-address code{display:block}
+.connected-wallet-address span{font-size:12px;color:#64748b;margin-bottom:7px}
+.connected-wallet-address code{font-size:13px;color:#071a36;word-break:break-all;line-height:1.55}
+.wallet-disconnect{height:45px;border:1px solid #f4a5ad;border-radius:12px;background:#fff5f6;color:#cf2638;font-weight:750}
+.wallet-disconnect:hover{background:#f04452;color:#fff;border-color:#f04452}
+.wallet-account-card>small{color:#64748b;line-height:1.55;text-align:center}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#1268f3" />
+  <meta name="description" content="TapeFlow X Layer 链上入口" />
+  <title>TapeFlow X · 1.2.247.tape</title>
+  <style>
+    :root{font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#071a36;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 80% 0,#dceeff,transparent 38%),#f4f7fb}.card{width:min(760px,100%);background:#fff;border:1px solid #dce6f3;border-radius:28px;padding:42px;box-shadow:0 20px 65px rgba(23,66,122,.12)}.brand{display:flex;align-items:center;gap:14px}.logo{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#0b5bd8,#61adff);color:#fff;display:grid;place-items:center;font-weight:900;font-size:20px}.brand b,.brand small{display:block}.brand b{font-size:22px}.brand small{color:#64748b;margin-top:4px}.chip{display:inline-block;margin:26px 0 10px;padding:7px 11px;border-radius:999px;background:#e9f9f1;color:#078550;font-size:12px;font-weight:800}h1{font-size:38px;line-height:1.15;margin:0 0 14px}p{color:#64748b;line-height:1.7;margin:0}.route{margin:22px 0;padding:16px;border-radius:15px;background:#eef6ff;color:#315b95;word-break:break-all}.route b,.route span{display:block}.route span{font-size:12px;margin-top:5px}.actions{display:grid;grid-template-columns:2fr 1fr;gap:10px}.actions a{min-height:50px;border-radius:13px;display:grid;place-items:center;text-decoration:none;font-weight:800}.primary{background:#1268f3;color:#fff}.secondary{border:1px solid #dce6f3;color:#071a36}.modules{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.modules a{color:#315b95;background:#f6f8fc;border-radius:999px;padding:7px 11px;text-decoration:none;font-size:12px}.note{display:block;margin-top:20px;color:#64748b;font-size:12px;line-height:1.6}.contact{margin-top:24px;padding-top:18px;border-top:1px solid #dce6f3;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:12px}.contact a{color:#1268f3}.contact code{word-break:break-all;color:#475569}@media(max-width:600px){.card{padding:28px 22px}h1{font-size:30px}.actions{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand"><div class="logo">TF</div><div><b>TapeFlow X</b><small>1.2.247.tape · X Layer 主网链上入口</small></div></div>
+    <span class="chip">ONCHAIN ENTRY</span>
+    <h1>正在打开 TapeFlow</h1>
+    <p>链上入口已核对当前分享参数，正在转到正式应用。红包、收款、锁仓等分享链接会保留原参数。</p>
+    <div class="route"><b id="route-name">TapeFlow 首页</b><span id="route-target">https://tapeflow.world/#home</span></div>
+    <div class="actions"><a id="open-tapeflow" class="primary" href="https://tapeflow.world/#home">立即打开 TapeFlow</a><a class="secondary" href="https://tapeflow.world/#veil">P3 隐私资金池</a></div>
+    <div class="modules"><a href="https://tapeflow.world/#pay">付款</a><a href="https://tapeflow.world/#receive">收款码</a><a href="https://tapeflow.world/#packet">红包</a><a href="https://tapeflow.world/#escrow">担保</a><a href="https://tapeflow.world/#lock">条件锁仓</a><a href="https://tapeflow.world/#veil">隐私</a><a href="https://tapeflow.world/#cross">跨链</a></div>
+    <small class="note">动态支付、P3 证明与 Relayer 服务运行在 tapeflow.world；本页作为 X Layer 链上可验证入口，不保存私钥、恢复密码或用户资金。</small>
+    <div class="contact"><a href="https://t.me/Naani_Developer">Telegram 联系开发者</a><code>赞助：0x382e86e61b8c3ad6c32b8eefdf81c5e9819703e6</code></div>
+  </main>
+  <script>
+    (()=>{
+      const raw=location.hash||"#home";
+      const route=/^#(?:request|packet|lock)=/.test(raw)||/^#(?:home|pay|receive|packet|escrow|schedule|lock|veil|cross|merchant)$/.test(raw)?raw:"#home";
+      const labels={home:"TapeFlow 首页",pay:"付款",receive:"收款码",packet:"红包",escrow:"担保付款",schedule:"定时付款",lock:"条件锁仓",veil:"P3 隐私资金池",cross:"跨链支付",merchant:"商户/API"};
+      const key=route.slice(1).split("=")[0],target="https://tapeflow.world/"+route;
+      document.getElementById("route-name").textContent=labels[key]||"TapeFlow 分享链接";
+      document.getElementById("route-target").textContent=target;
+      document.getElementById("open-tapeflow").href=target;
+      setTimeout(()=>location.replace(target),1400);
+    })();
+  </script>
+</body>
+</html>
